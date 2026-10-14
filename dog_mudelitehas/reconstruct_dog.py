@@ -23,13 +23,35 @@ def ellipsoid(cx,cy,cz,rx,ry,rz):
  return (1-np.sqrt(((xx-cx)/rx)**2+((yy-cy)/ry)**2+((zz-cz)/rz)**2))*min(rx,ry,rz)
 # These priors regularize ambiguous DEPTH only; no existing 3D model is sampled.
 # The source masks retain responsibility for the visible contours.
-head=ellipsoid(0,-.09,1.595,.207,.255,.235)
+head=ellipsoid(0,-.09,1.595,.196,.255,.235)
 muzzle=ellipsoid(0,-.36,1.470,.151,.254,.132)
 head=smoothmax(head,muzzle,.035)
 for s in (-1,1):
- head=smoothmax(head,ellipsoid(s*.235,-.008,1.555,.112,.116,.173),.018)
+ head=smoothmax(head,ellipsoid(s*.252,-.015,1.565,.092,.065,.164),.020)
 head_phi=smoothmin(raw,head,.008)
 initial=np.where(zz>1.34,head_phi,raw)
+def capsule(a,b,radii):
+ r=np.array(radii);a=np.array(a)/r;b=np.array(b)/r;ab=b-a
+ qx=xx/r[0]-a[0];qy=yy/r[1]-a[1];qz=zz/r[2]-a[2]
+ t=np.clip((qx*ab[0]+qy*ab[1]+qz*ab[2])/(ab@ab),0,1)
+ return (1-np.sqrt((qx-t*ab[0])**2+(qy-t*ab[1])**2+(qz-t*ab[2])**2))*r.min()
+limbs=np.full(raw.shape,-10.)
+for s in (-1,1):
+ upper=capsule((s*.22,-.13,1.18),(s*.275,-.405,1.035),(.097,.081,.087))
+ lower=capsule((s*.275,-.405,1.035),(s*.28,-.465,.855),(.083,.075,.083))
+ paw=ellipsoid(s*.28,-.46,.84,.088,.087,.105)
+ limb=smoothmax(smoothmax(upper,lower,.020),paw,.015)
+ limbs=smoothmax(limbs,limb,.018)
+lower_body=ellipsoid(0,.10,.29,.235,.24,.30)
+for s in (-1,1):
+ haunch=ellipsoid(s*.21,.02,.35,.18,.25,.30)
+ hock=ellipsoid(s*.27,-.08,.155,.105,.13,.185)
+ foot=ellipsoid(s*.30,-.30,.063,.13,.205,.063)
+ leg=smoothmax(smoothmax(haunch,hock,.032),foot,.024)
+ lower_body=smoothmax(lower_body,leg,.025)
+# Preserve the tail inferred from the source masks while rounding its section.
+tail=capsule((.05,.22,.10),(.40,.42,.105),(.08,.08,.065))
+lower_body=smoothmax(lower_body,tail,.025)
 # Cross-section rounding of trunk and haunches using the actual silhouette
 # widths at each row. Raised forelegs use separate inferred depth bands.
 fm=(D['front_mask']|D['back_mask'])[::-1]
@@ -48,11 +70,16 @@ for k,zk in enumerate(z):
  trunk=ellipse
  if .67<zk<1.19:
   # Shared silhouette tells us vertical width; rounded limb thickness is inferred.
-  a=.13-np.abs(y+.38)
-  for s in (-1,1):
-   limb=np.minimum(.145-np.abs(x[:,None]-s*.265),a[None,:])
-   trunk=smoothmax(trunk,limb,.022)
+  trunk=smoothmax(trunk,limbs[:,:,k],.025)
  initial[:,:,k]=smoothmin(initial[:,:,k],trunk,.009)
+initial=np.where(zz<.59,smoothmin(initial,lower_body,.008),initial)
+# Small inferred eye sockets avoid placing optical spheres on a flat forehead.
+for s in (-1,1):
+ xi=int(np.argmin(abs(x-s*.108)));zi=int(np.argmin(abs(z-1.655)));ys=np.flatnonzero(initial[xi,:,zi]>0)
+ if len(ys):
+  sy=float(y[ys[0]])+.007
+  socket=ellipsoid(s*.108,sy,1.655,.028,.020,.025)
+  initial=np.minimum(initial,-socket)
 
 def largest(mask):
  lab,n=label(mask);counts=np.bincount(lab.ravel());counts[0]=0

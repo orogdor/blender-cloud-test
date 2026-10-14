@@ -173,10 +173,11 @@ def source_colors(ob):
   color+=pixels[:,:3]*ww[:,None];weight+=ww
  color/=np.maximum(weight[:,None],1e-6);color[weight<1e-4]=[.75,.53,.32]
  sat=color.max(1)-color.min(1);brightness=color.mean(1)
- cream=np.clip((.22-sat)/.09,0,1)*np.clip((brightness-.38)/.2,0,1)
- cream=np.maximum(cream,np.clip((.20-np.abs(x))/.05,0,1)*np.clip((-y-.19)/.06,0,1)*((z>.64)&(z<1.38)))
- cream=np.maximum(cream,np.clip((.15-np.abs(x))/.045,0,1)*np.clip((-y-.28)/.05,0,1)*((z>1.39)&(z<1.52)))
- cream*=np.where(z>1.53,0,1)
+ # Smooth anatomical cream patches; suppress random lighting-based blotches.
+ chest=(1-(x/.19)**2-((z-1.075)/.43)**2)
+ cream=np.clip(chest*5,0,1)*np.clip((-y-.13)/.09,0,1)
+ muzzle=(1-(x/.153)**2-((z-1.465)/.122)**2)
+ cream=np.maximum(cream,np.clip(muzzle*5,0,1)*np.clip((-y-.25)/.08,0,1))
  # Palette compression removes directional light/dark patches from source views.
  variation=np.clip((color[:,0]-color[:,2]-.30)*.08,-.025,.025)
  tan=np.array([.72,.49,.29])[None,:]+variation[:,None]
@@ -249,10 +250,10 @@ def add_face_details(body,rig):
   # Apply locations to mesh so all detail skin matrices share body's coordinates.
   bpy.ops.object.transform_apply(location=True,rotation=False,scale=False);ob.data.materials.append(mat);attach_detail(ob,rig,'head');details.append(ob);return ob
  for s,side in ((1,'L'),(-1,'R')):
-  p=front_hit(s*.108,1.655);p.y-=.012
-  sphere('Eye.'+side,p,(.034,.018,.031),eye)
-  sphere('Iris.'+side,p+Vector((0,-.015,0)),(.023,.006,.023),iris)
-  sphere('Pupil.'+side,p+Vector((0,-.020,0)),(.009,.004,.014),pupil)
+  p=front_hit(s*.108,1.655);p.y-=.010
+  sphere('Eye.'+side,p,(.019,.012,.018),eye)
+  sphere('Iris.'+side,p+Vector((0,-.010,0)),(.012,.004,.012),iris)
+  sphere('Pupil.'+side,p+Vector((0,-.014,0)),(.005,.003,.007),pupil)
  nose=front_hit(0,1.544);nose.y-=.017;sphere('Nose',nose,(.056,.034,.039),black)
  for s in (-1,1):sphere('Nostril',nose+Vector((s*.028,-.027,.003)),(.012,.008,.007),line)
  # A thin curve conforms to the reconstructed muzzle instead of painting a shadow.
@@ -261,6 +262,7 @@ def add_face_details(body,rig):
   p=front_hit(x,z);p.y-=.003;path.append(p)
  curve=bpy.data.curves.new('Closed_mouth_curve','CURVE');curve.dimensions='3D';curve.bevel_depth=.0018;curve.bevel_resolution=2;sp=curve.splines.new('BEZIER');sp.bezier_points.add(len(path)-1)
  for b,p in zip(sp.bezier_points,path):b.co=p;b.handle_left_type='AUTO';b.handle_right_type='AUTO'
+ for prev in bpy.context.selected_objects:prev.select_set(False)
  ob=bpy.data.objects.new('Closed_mouth',curve);bpy.context.collection.objects.link(ob);bpy.context.view_layer.objects.active=ob;ob.select_set(True);bpy.ops.object.convert(target='MESH');ob.data.materials.append(line);attach_detail(ob,rig,'head');details.append(ob)
  return details
 
@@ -351,24 +353,26 @@ def mesh_silhouette_check(body):
  rig.data.pose_position=old;bpy.context.view_layer.update();return scores
 
 def setup_studio():
- scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=48;scene.cycles.use_denoising=False
+ scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=16;scene.cycles.use_denoising=False
  scene.render.resolution_x=576;scene.render.resolution_y=720;scene.render.resolution_percentage=100
  scene.world.use_nodes=True;scene.world.node_tree.nodes.get('Background').inputs[0].default_value=(.14,.17,.21,1);scene.world.node_tree.nodes.get('Background').inputs[1].default_value=.5
  bpy.ops.object.camera_add(location=(3.2,-5.8,2.5));cam=bpy.context.object;aim(cam,(0,-.02,.94));cam.data.type='ORTHO';cam.data.ortho_scale=2.5;scene.camera=cam
  for pos,power,size in [((2,-4,5),600,4),((-3,-2,3),400,3),((1,3,4),700,3)]:
   bpy.ops.object.light_add(type='AREA',location=pos);light=bpy.context.object;light.data.energy=power;light.data.shape='DISK';light.data.size=size;aim(light,(0,0,.9))
- bpy.ops.mesh.primitive_plane_add(size=200,location=(0,0,-.025));floor=bpy.context.object;floor.name='Studio_floor';floor.data.materials.append(material('Neutral_studio',(.085,.11,.15),.8))
+ body=bpy.data.objects.get('Dog_100000_Body_Quads');floor_z=min(v.co.z for v in body.data.vertices)-.001
+ bpy.ops.mesh.primitive_plane_add(size=200,location=(0,0,floor_z));floor=bpy.context.object;floor.name='Studio_floor';floor.data.materials.append(material('Neutral_studio',(.085,.11,.15),.8))
  return cam
 
 def render_all(cam):
  scene=bpy.context.scene;folder=OUT/'frames';folder.mkdir(exist_ok=True)
- for f in range(1,FRAMES+1):
+ preview_frames=list(range(1,FRAMES+1,2))
+ for f in preview_frames:
   scene.frame_set(f);scene.render.filepath=str(folder/f'sit_{f:03}.png');bpy.ops.render.render(write_still=True);print('RENDERED_SIT_FRAME',f,flush=True)
- pictures=[Image.open(folder/f'sit_{f:03}.png').convert('RGB') for f in range(1,FRAMES+1)]
+ pictures=[Image.open(folder/f'sit_{f:03}.png').convert('RGB') for f in preview_frames]
  sample=Image.new('RGB',(576*4,720*2))
- for i,f in enumerate((0,6,12,18,24,30,36,42)):sample.paste(pictures[f],((i%4)*576,(i//4)*720))
+ for i,f in enumerate(np.linspace(0,len(pictures)-1,8).astype(int)):sample.paste(pictures[f],((i%4)*576,(i//4)*720))
  pal=sample.quantize(colors=192);gif=[p.quantize(palette=pal,dither=Image.Dither.NONE) for p in pictures]
- ds=[int((i+1)*1000/FPS/10)*10-int(i*1000/FPS/10)*10 for i in range(FRAMES)]
+ ds=[int((i+1)*2000/len(pictures)/10)*10-int(i*2000/len(pictures)/10)*10 for i in range(len(pictures))]
  gif[0].save(OUT/'Dog_SitPretty.gif',save_all=True,append_images=gif[1:],duration=ds,loop=0,disposal=2)
  pictures[0].save(OUT/'Dog_SitPretty_preview.png')
  # Additional inspection angles from the same actual 3D model.
@@ -413,9 +417,10 @@ def main():
  print('QUAD_RETOPOLOGY_CHECK',validate(body,True),flush=True);exact_quads(body)
  rig,specs=rig_dog(body);report=validate(body,True);assert report['quad_faces']==100000,report
  setup_material(body);details=add_face_details(body,rig);fur=add_short_fur(body,rig)
+ body.data.color_attributes.remove(body.data.color_attributes['intrinsic_albedo'])
  animate(rig);report.update(deformation_checks(body,rig));report['final_mesh_silhouette_iou']=mesh_silhouette_check(body)
  report.update({'body_quad_faces':100000,'bones':len(specs),'animation':'SitPretty','frames':FRAMES,'fps':FPS,'body_components':1,'details_separate_by_design':[ob.name for ob in details]+[fur.name],
- 'material_maps':['Dog_BaseColor.png','Dog_Normal.png','Dog_Roughness.png'],'fur_detail_quads':len(fur.data.polygons),'albedo_method':'Diffuse palette classification and anatomical cream regions; source shading suppressed','uv_layers':len(body.data.uv_layers)})
+ 'material_maps':['Dog_BaseColor.png','Dog_Normal.png','Dog_Roughness.png'],'preview_fps':12,'fur_detail_quads':len(fur.data.polygons),'albedo_method':'Diffuse palette classification and anatomical cream regions; source shading suppressed','uv_layers':len(body.data.uv_layers)})
  assert all(abs(sum(g.weight for g in v.groups)-1)<1e-4 for v in body.data.vertices),'Skin weights not normalized'
  assert min(report['final_mesh_silhouette_iou'].values())>.65,report
  (OUT/'validation.json').write_text(json.dumps(report,indent=2));print('FINAL_DOG_VALIDATION',report,flush=True)
