@@ -166,15 +166,16 @@ def color_teddy(ob):
  ob.data.materials.append(mat)
  for p in ob.data.polygons:p.use_smooth=True
 
-def animate(rig):
+def animate(rig,ob):
  scene=bpy.context.scene;scene.frame_start=1;scene.frame_end=FRAMES+1;scene.render.fps=FPS
  for bone in rig.pose.bones:bone.rotation_mode='QUATERNION'
  def turn(name,angle,axis=(1,0,0)):
   pb=rig.pose.bones[name];local_axis=pb.bone.matrix_local.to_3x3().inverted()@Vector(axis)
   pb.rotation_quaternion=Quaternion(local_axis.normalized(),angle)
  for frame in range(1,FRAMES+2):
+  scene.frame_set(frame)
   t=2*math.pi*(frame-1)/FRAMES
-  root=rig.pose.bones['root'];root.location=(0,.055+.04*(1-math.cos(2*t)),0);root.keyframe_insert('location',frame=frame)
+  root=rig.pose.bones['root'];root.location=(0,0,0);root.keyframe_insert('location',frame=frame)
   turn('hips',.09);turn('spine',.08);turn('chest',.055*math.sin(t),(0,0,1));turn('neck',-.11);turn('head',.025*math.sin(t),(0,1,0))
   for sign,side in ((1,'L'),(-1,'R')):
    phase=t+(0 if sign==1 else math.pi)
@@ -185,6 +186,14 @@ def animate(rig):
    turn('forearm.'+side,.20+.30*max(0,math.sin(phase)))
    turn('paw.'+side,.06*math.sin(phase))
   for pb in rig.pose.bones:pb.keyframe_insert('rotation_quaternion',frame=frame)
+  # Ground the lowest deformed sole for this actual pose. Local Y of the
+  # vertical root bone is world Z; add only a short running flight phase.
+  bpy.context.view_layer.update()
+  evaluated=ob.evaluated_get(bpy.context.evaluated_depsgraph_get());posed=evaluated.to_mesh()
+  coords=np.empty(len(posed.vertices)*3,dtype=np.float32);posed.vertices.foreach_get('co',coords)
+  lowest=float(coords.reshape((-1,3))[:,2].min());evaluated.to_mesh_clear()
+  target=-.006+.025*max(0,math.sin(2*t))**4
+  root.location=(0,target-lowest,0);root.keyframe_insert('location',frame=frame)
  rig.animation_data.action.name='Run'
  for curve in rig.animation_data.action.fcurves:
   for key in curve.keyframe_points:key.interpolation='LINEAR'
@@ -239,7 +248,7 @@ def main():
  print('QUADRIFLOW_CHECK',validate(ob,True),flush=True)
  base_report=exact_quads(ob);print('EXACT_6250_QUADS',base_report,flush=True)
  rig,specs=rig_teddy(ob);report=validate(ob,True);assert report['quad_faces']==100000,report
- color_teddy(ob);animate(rig);report.update(evaluate_test(ob))
+ color_teddy(ob);animate(rig,ob);report.update(evaluate_test(ob))
  report['bones']=len(rig.data.bones);report['animation']='Run';report['frames']=FRAMES;report['fps']=FPS
  report['base_quad_faces']=6250;report['subdivision_levels_applied']=2
  report['face_budget_method']='6250 connected base quads, two applied Catmull-Clark subdivisions: 6250*16=100000'

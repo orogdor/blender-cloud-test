@@ -23,7 +23,7 @@ phi=-tau*np.logaddexp(np.logaddexp(-front/tau,-back/tau),np.logaddexp(-left/tau,
 # depth priors at the CLOUD stage, before creating any mesh. These are labelled
 # estimates rather than claiming measured depths from a four-view image sheet.
 xx=x[:,None,None];yy=y[None,:,None];zz=z[None,None,:]
-arm_region=(np.abs(xx)>.32)&(zz>.56)&(zz<1.115)
+arm_region=(np.abs(xx)>.32)&(zz>.48)&(zz<1.115)
 arm_depth=.145-np.abs(yy+.005)
 rounded_arm=-tau*np.logaddexp(-phi/tau,-arm_depth/tau)
 phi=np.where(arm_region,rounded_arm,phi)
