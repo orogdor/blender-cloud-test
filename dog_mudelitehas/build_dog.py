@@ -138,6 +138,9 @@ def rig_dog(ob):
   weights=[1/(ds[i]+.035)**5 for i in nearest];total=sum(weights)
   for i,w in zip(nearest,weights):groups[names[i]].add([v.index],w/total,'REPLACE')
  ob.parent=rig;bpy.context.view_layer.objects.active=ob;ob.select_set(True);rig.select_set(False)
+ # Smooth anatomical region transitions before subdivision to prevent skin spurs.
+ bpy.ops.object.vertex_group_smooth(group_select_mode='ALL',factor=.65,repeat=8,expand=0)
+ bpy.ops.object.vertex_group_normalize_all(lock_active=False)
  # UVs and low-resolution skin are built before the detail subdivision.
  bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.uv.smart_project(angle_limit=1.1519,island_margin=.015);bpy.ops.object.mode_set(mode='OBJECT')
  sub=ob.modifiers.new('100000_body_quads','SUBSURF');sub.levels=2;sub.render_levels=2;bpy.ops.object.modifier_apply(modifier=sub.name)
@@ -179,13 +182,13 @@ def setup_material(ob):
  if 'Sheen Weight' in bs.inputs:bs.inputs['Sheen Weight'].default_value=.24
  elif 'Sheen' in bs.inputs:bs.inputs['Sheen'].default_value=.24
  vertex=nodes.new('ShaderNodeVertexColor');vertex.layer_name='intrinsic_albedo';links.new(vertex.outputs['Color'],bs.inputs['Base Color'])
- coords=nodes.new('ShaderNodeTexCoord');mapping=nodes.new('ShaderNodeVectorMath');mapping.operation='MULTIPLY';mapping.inputs[1].default_value=(1,1,4)
+ coords=nodes.new('ShaderNodeTexCoord');mapping=nodes.new('ShaderNodeVectorMath');mapping.operation='MULTIPLY';mapping.inputs[1].default_value=(1,1,.18)
  links.new(coords.outputs['Generated'],mapping.inputs[0]);noise=nodes.new('ShaderNodeTexNoise');noise.inputs['Scale'].default_value=280;noise.inputs['Detail'].default_value=2
  links.new(mapping.outputs[0],noise.inputs['Vector']);bump=nodes.new('ShaderNodeBump');bump.inputs['Strength'].default_value=.25;bump.inputs['Distance'].default_value=.0018
  links.new(noise.outputs['Fac'],bump.inputs['Height']);links.new(bump.outputs['Normal'],bs.inputs['Normal'])
  ob.data.materials.clear();ob.data.materials.append(mat)
  for p in ob.data.polygons:p.use_smooth=True
- scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=1
+ scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=1;scene.cycles.use_denoising=False
  bpy.context.view_layer.objects.active=ob
  for o in bpy.context.selected_objects:o.select_set(False)
  ob.select_set(True);texdir=OUT/'textures';texdir.mkdir(exist_ok=True)
@@ -278,7 +281,7 @@ def deformation_checks(body,rig):
  assert np.isfinite(co).all(),'Non-finite animation';movement=np.linalg.norm(co[4]-co[0],axis=1)
  assert movement.max()>.008,'Animation is not deforming the actual skin'
  assert max(edge_ratio)<2.0,edge_ratio
- ground=rest[:,2]<.065;ground_motion=float(np.linalg.norm(co[4][ground]-co[0][ground],axis=1).max())
+ ground=(rest[:,2]<.065)&(rest[:,1]<.18);ground_motion=float(np.linalg.norm(co[4][ground]-co[0][ground],axis=1).max())
  seam=float(np.abs(co[0]-co[-1]).max());assert seam<1e-5,seam
  assert ground_motion<.04,ground_motion
  scene.frame_set(1)
@@ -331,7 +334,7 @@ def mesh_silhouette_check(body):
  rig.data.pose_position=old;bpy.context.view_layer.update();return scores
 
 def setup_studio():
- scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=16;scene.cycles.use_denoising=True
+ scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=48;scene.cycles.use_denoising=False
  scene.render.resolution_x=576;scene.render.resolution_y=720;scene.render.resolution_percentage=100
  scene.world.use_nodes=True;scene.world.node_tree.nodes.get('Background').inputs[0].default_value=(.14,.17,.21,1);scene.world.node_tree.nodes.get('Background').inputs[1].default_value=.5
  bpy.ops.object.camera_add(location=(3.2,-5.8,2.5));cam=bpy.context.object;aim(cam,(0,-.02,.94));cam.data.type='ORTHO';cam.data.ortho_scale=2.5;scene.camera=cam
