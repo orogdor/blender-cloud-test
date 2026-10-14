@@ -139,8 +139,18 @@ def rig_dog(ob):
   for i,w in zip(nearest,weights):groups[names[i]].add([v.index],w/total,'REPLACE')
  ob.parent=rig;bpy.context.view_layer.objects.active=ob;ob.select_set(True);rig.select_set(False)
  # Smooth anatomical region transitions before subdivision to prevent skin spurs.
- bpy.ops.object.vertex_group_smooth(group_select_mode='ALL',factor=.65,repeat=8,expand=0)
- bpy.ops.object.vertex_group_normalize_all(lock_active=False)
+ groups_list=list(ob.vertex_groups);w=np.zeros((len(ob.data.vertices),len(groups_list)),dtype='float64')
+ for v in ob.data.vertices:
+  for g in v.groups:w[v.index,g.group]=g.weight
+ edges=np.array([tuple(e.vertices) for e in ob.data.edges]);degree=np.bincount(edges.ravel(),minlength=len(w))
+ for _ in range(10):
+  neighbor=np.zeros_like(w);np.add.at(neighbor,edges[:,0],w[edges[:,1]]);np.add.at(neighbor,edges[:,1],w[edges[:,0]])
+  w=.45*w+.55*neighbor/np.maximum(degree[:,None],1)
+ w/=np.maximum(w.sum(1)[:,None],1e-12)
+ all_indices=list(range(len(w)))
+ for group in groups_list:group.remove(all_indices)
+ for vi,row in enumerate(w):
+  for gi in np.flatnonzero(row>1e-5):groups_list[int(gi)].add([vi],float(row[gi]),'REPLACE')
  # UVs and low-resolution skin are built before the detail subdivision.
  bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.uv.smart_project(angle_limit=1.1519,island_margin=.015);bpy.ops.object.mode_set(mode='OBJECT')
  sub=ob.modifiers.new('100000_body_quads','SUBSURF');sub.levels=2;sub.render_levels=2;bpy.ops.object.modifier_apply(modifier=sub.name)
@@ -198,7 +208,11 @@ def setup_material(ob):
   if kind=='NORMAL':im.colorspace_settings.name='Non-Color'
   texnode.image=im;nodes.active=texnode
   bpy.ops.object.bake(type=kind,margin=12,use_clear=True)
-  im.filepath_raw=str((texdir/(name+'.png')).resolve());im.file_format='PNG';im.save();im.pack();return im
+  im.filepath_raw=str((texdir/(name+'.png')).resolve());im.file_format='PNG';im.save();im.pack()
+  pixels=np.asarray(Image.open(im.filepath_raw))
+  if kind=='EMIT':assert pixels[:,:,:3].mean()>10 and pixels[:,:,:3].max()>80,'Empty albedo bake'
+  print('PBR_MAP_BAKED',name,int(pixels.min()),int(pixels.max()),float(pixels.mean()),flush=True)
+  return im
  emission=nodes.new('ShaderNodeEmission');links.new(vertex.outputs['Color'],emission.inputs['Color']);links.new(emission.outputs[0],out.inputs['Surface'])
  albedo=bake('Dog_BaseColor','EMIT');links.new(bs.outputs['BSDF'],out.inputs['Surface'])
  normal=bake('Dog_Normal','NORMAL')
@@ -280,6 +294,9 @@ def deformation_checks(body,rig):
   ratios=np.linalg.norm(a[edges[:,0]]-a[edges[:,1]],axis=1)/np.maximum(rest_len,1e-7);edge_ratio.append(float(np.quantile(ratios,.999)))
  assert np.isfinite(co).all(),'Non-finite animation';movement=np.linalg.norm(co[4]-co[0],axis=1)
  assert movement.max()>.008,'Animation is not deforming the actual skin'
+ if max(edge_ratio)>=2.0:
+  np.savez_compressed(OUT/'debug_skin.npz',rest=rest,edges=edges,poses=np.array(co),rest_edge_length=rest_len)
+  cam=setup_studio();scene.frame_set(13);scene.render.resolution_percentage=50;scene.cycles.samples=8;scene.render.filepath=str(OUT/'debug_pose.png');bpy.ops.render.render(write_still=True)
  assert max(edge_ratio)<2.0,edge_ratio
  ground=(rest[:,2]<.065)&(rest[:,1]<.18);ground_motion=float(np.linalg.norm(co[4][ground]-co[0][ground],axis=1).max())
  seam=float(np.abs(co[0]-co[-1]).max());assert seam<1e-5,seam
