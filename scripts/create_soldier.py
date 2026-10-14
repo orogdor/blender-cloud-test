@@ -44,7 +44,7 @@ def cube(name, pos, dims, m, bevel=0):
         mod=o.modifiers.new("Edge bevel","BEVEL")
         mod.width=bevel
         mod.segments=2
-        o.modifiers.new("Weighted normals","WEIGHTED_NORMAL")
+        # Omit weighted normal modifier for compatibility with stock Ubuntu Blender.
     return o
 def ellipsoid(name,pos,scale,m,detail=2):
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=detail,radius=1,location=pos)
@@ -116,6 +116,9 @@ for x in (-.25,.25):
 scene=bpy.context.scene
 scene.render.engine="CYCLES"
 scene.cycles.samples=12
+# Ubuntu Blender may be built without OpenImageDenoise; disable denoising.
+for layer in scene.view_layers:
+    layer.cycles.use_denoising = False
 scene.render.resolution_x=640
 scene.render.resolution_y=640
 scene.render.resolution_percentage=100
