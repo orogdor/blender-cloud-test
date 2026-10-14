@@ -1,0 +1,23 @@
+name: Animated Sword Fighter
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/create_sword_fighter.py'
+      - '.github/workflows/sword-fighter.yml'
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: sudo apt-get update && sudo apt-get install -y blender
+      - name: Generate rigged fighter and GLB
+        run: blender -b --factory-startup --python-exit-code 1 --python scripts/create_sword_fighter.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: animated-sword-fighter
+          path: fighter_output/
+          retention-days: 30
