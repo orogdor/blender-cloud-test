@@ -25,6 +25,7 @@ jobs:
           test -s output/fourview/four_view_mesh.glb
           test -s output/fourview/four_view_mesh.blend
           test -s output/fourview/stats.json
+          test -s output/fourview/preview.png
           for side in front back left right; do test -s "output/fourview/$side.png"; done
           cat output/fourview/stats.json
           du -h output/fourview/*
