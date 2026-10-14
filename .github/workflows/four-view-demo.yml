@@ -1,0 +1,36 @@
+name: Four-view mesh reconstruction demo
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'fourview/**'
+      - '.github/workflows/four-view-demo.yml'
+permissions:
+  contents: read
+jobs:
+  four-view-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and NumPy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy
+      - name: Reconstruct demo shape from four PNG silhouettes
+        run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python fourview/demo.py
+      - name: Check output
+        run: |
+          test -s output/fourview/four_view_mesh.glb
+          test -s output/fourview/four_view_mesh.blend
+          test -s output/fourview/stats.json
+          for side in front back left right; do test -s "output/fourview/$side.png"; done
+          cat output/fourview/stats.json
+          du -h output/fourview/*
+      - name: Upload 3D files and views
+        uses: actions/upload-artifact@v4
+        with:
+          name: four-view-mesh-prototype
+          path: output/fourview/
+          retention-days: 30
