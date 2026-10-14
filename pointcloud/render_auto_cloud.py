@@ -19,7 +19,7 @@ report=module['validate_geometry']([tuple(v.co) for v in car.data.vertices],
 text=bpy.data.texts.new('auto_punktipilv_mesh.py');text.write(source.read_text())
 scene=bpy.context.scene
 scene.render.engine='CYCLES';scene.cycles.samples=24
-scene.cycles.use_denoising=True
+scene.cycles.use_denoising=False  # Ubuntu Blender has no OpenImageDenoiser
 scene.render.resolution_x=1000;scene.render.resolution_y=720
 scene.render.resolution_percentage=100
 scene.world.use_nodes=True
