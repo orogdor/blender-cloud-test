@@ -35,6 +35,32 @@ jobs:
       - name: Generate soldier GLB, BLEND and previews
         run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python scripts/create_soldier.py
 
+      - name: Build anatomical cat from custom 3D vertices
+        run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python scripts/create_vector_cat.py
+
+      - name: Verify cat mesh and stage Three.js viewer
+        run: |
+          test -s output/vector_cat/vector_cat.glb
+          test -s output/vector_cat/vector_cat.blend
+          test -s output/vector_cat/preview.png
+          test -s output/vector_cat/side.png
+          test -s output/vector_cat/front.png
+          test -s output/vector_cat/stats.json
+          mkdir -p site/cat/models
+          cp output/vector_cat/vector_cat.glb site/cat/models/cat.glb
+          cp output/vector_cat/preview.png site/cat/preview.png
+          cp output/vector_cat/front.png site/cat/front.png
+          cp output/vector_cat/side.png site/cat/side.png
+          cat output/vector_cat/stats.json
+
+      - name: Upload vertex cat files
+        uses: actions/upload-artifact@v4
+        with:
+          name: vector-cat-blender-glb-and-previews
+          path: output/vector_cat/
+          retention-days: 30
+          if-no-files-found: error
+
       - name: Verify the generated files
         run: |
           test -s output/soldier.glb
