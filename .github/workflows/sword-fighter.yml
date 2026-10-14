@@ -12,12 +12,39 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - name: Install Blender
-        run: sudo apt-get update && sudo apt-get install -y blender
+      - name: Install Blender and its Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender python3-numpy
+          blender -b --factory-startup --python-expr "import numpy; print('NUMPY_OK', numpy.__version__)"
       - name: Generate rigged fighter and GLB
         run: blender -b --factory-startup --python-exit-code 1 --python scripts/create_sword_fighter.py
-      - uses: actions/upload-artifact@v4
+      - name: Validate GLB model, skin and animation clips
+        run: |
+          python3 - <<'PY'
+          import os, json, struct
+          path='fighter_output/sword_fighter.glb'
+          assert os.path.getsize(path)>4096, 'Missing or empty GLB'
+          with open(path,'rb') as f:
+              header=f.read(12)
+              magic,version,length=struct.unpack('<4sII',header)
+              assert magic==b'glTF' and version==2 and length==os.path.getsize(path)
+              size,kind=struct.unpack('<I4s',f.read(8))
+              assert kind==b'JSON'
+              doc=json.loads(f.read(size))
+          print('MESHES:',len(doc.get('meshes',[])),'SKINS:',len(doc.get('skins',[])))
+          print('ANIMATIONS:',[a.get('name') for a in doc.get('animations',[])])
+          assert doc.get('meshes'), 'GLB has no meshes'
+          assert doc.get('skins'), 'GLB has no skeletal skin'
+          assert len(doc.get('animations',[]))>=4, 'Expected idle/walk/slash/block clips'
+          assert os.path.isfile('fighter_output/sword_fighter.blend')
+          print('FIGHTER_GLB_VALIDATED')
+          PY
+      - name: Upload model, even for failed diagnostic builds
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: animated-sword-fighter
           path: fighter_output/
+          if-no-files-found: warn
           retention-days: 30
