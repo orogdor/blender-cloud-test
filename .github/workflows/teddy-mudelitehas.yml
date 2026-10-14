@@ -1,0 +1,46 @@
+name: Mudelitehas Teddy 100000 Quads Run
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'teddy_mudelitehas/**'
+      - '.github/workflows/teddy-mudelitehas.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and point cloud tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy python3-scipy python3-pil python3-venv
+          python3 -m venv --system-site-packages /tmp/teddy-venv
+          /tmp/teddy-venv/bin/pip install open3d==0.19.0
+      - name: Four view silhouettes to point cloud to Poisson surface
+        run: /tmp/teddy-venv/bin/python teddy_mudelitehas/reconstruct_teddy.py
+      - name: Exactly 100000 quads plus rig and actual running animation
+        run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python teddy_mudelitehas/build_teddy.py
+      - name: Validate final geometry animation and GIF
+        run: |
+          test -s output/teddy_mudelitehas/Teddy_Run_100000.gif
+          test -s output/teddy_mudelitehas/Teddy_Run_100000.blend
+          test -s output/teddy_mudelitehas/Teddy_Run_100000.glb
+          python3 - <<'PY'
+          import json
+          d=json.load(open('output/teddy_mudelitehas/validation.json'))
+          assert d['quad_faces']==100000 and d['faces']==100000,d
+          assert d['components']==1 and d['boundary_edges']==0 and d['nonmanifold_edges']==0,d
+          assert d['glb_triangle_count']==200000 and d['glb_skins']>0 and d['glb_animations'],d
+          assert d['max_vertex_motion_between_frames']>.15,d
+          print(d)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: teddy-mudelitehas-100000-run
+          path: output/teddy_mudelitehas/
+          if-no-files-found: error
+          retention-days: 30
