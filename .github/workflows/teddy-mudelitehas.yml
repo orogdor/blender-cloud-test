@@ -1,11 +1,10 @@
-name: Mudelitehas Teddy 100000 Quads Run
+name: Mudelitehas - Tase 2 - Karu ja jooksuanimatsioon
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
       - 'teddy_mudelitehas/**'
-      - '.github/workflows/teddy-mudelitehas.yml'
 permissions:
   contents: read
 jobs:

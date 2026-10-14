@@ -1,0 +1,52 @@
+name: Mudelitehas - Tase 1 - Kiire mesh
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Mudelitehas <nelinurkade arv> 1 <mudeli kirjeldus>'
+        required: true
+        default: 'Mudelitehas 5000 1 karu'
+        type: string
+      source_input:
+        description: 'Joondatud nelja vaate .b85 andmefaili tee hoidlas'
+        required: true
+        default: 'teddy_mudelitehas/teddy_inputs.b85'
+        type: string
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse level 1 model request
+        env:
+          MODEL_COMMAND: ${{ inputs.command }}
+        run: |
+          python3 mudelitehas/command.py "$MODEL_COMMAND" --output output/mudelitehas_level1/request.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('output/mudelitehas_level1/request.json'))
+          assert d['level']==1,'Vali selle töövoo jaoks tase 1'
+          assert not d['animation_requested'],'Taseme 1 põhiretsept on staatiline'
+          assert d['quad_faces']>=256 and d['quad_faces']%2==0,'Kasuta paarisarvu alates 256-st'
+          PY
+      - name: Install Blender and reconstruction dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy python3-scipy python3-pil python3-venv
+          python3 -m venv --system-site-packages /tmp/mudelitehas-level1
+          /tmp/mudelitehas-level1/bin/pip install open3d==0.19.0
+      - name: Four views to real point cloud to surface
+        env:
+          SOURCE_INPUT: ${{ inputs.source_input }}
+        run: /tmp/mudelitehas-level1/bin/python mudelitehas/reconstruct_level1.py --input "$SOURCE_INPUT" --request output/mudelitehas_level1/request.json
+      - name: Build simple closed mesh and preview
+        run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python mudelitehas/build_level1.py -- --request output/mudelitehas_level1/request.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mudelitehas-tase1
+          path: output/mudelitehas_level1/
+          if-no-files-found: error
+          retention-days: 30

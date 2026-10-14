@@ -1,11 +1,10 @@
-name: Mudelitehas Dog SitPretty realism test
+name: Mudelitehas - Tase 3 - Koera taiustatud test
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
       - 'dog_mudelitehas/**'
-      - '.github/workflows/dog-mudelitehas.yml'
 permissions:
   contents: read
 jobs:

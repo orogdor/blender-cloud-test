@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "command_format": "Mudelitehas <nelinurkade_arv> <tase_1_2_3> <mudeli_kirjeldus>",
+  "geometry_unit": "quads",
+  "budget_scope": "primary_surface",
+  "shared_pipeline": ["2D concept", "four consistent views", "point cloud", "mesh"],
+  "levels": {
+    "1": {
+      "name": "Kiire",
+      "description": "Lihtne kinnine mesh, üks põhivärv ja kiire eelvaade.",
+      "grid_limit": [80, 80, 140],
+      "poisson_depth": 7,
+      "materials": "single_basic_material",
+      "rig": "not_in_basic_recipe",
+      "pbr_maps": false,
+      "lod": false,
+      "view_comparison": false,
+      "outputs": ["GLB", "BLEND", "preview PNG", "point cloud", "validation"]
+    },
+    "2": {
+      "name": "Tavaline",
+      "description": "Varasema karutesti töövoog: täpsem kuju, pildipõhine värv ja tegelase luustik ning animatsioon vastavalt tellimusele.",
+      "example_recipe": "teddy_mudelitehas",
+      "materials": "image_based_surface_color",
+      "rig": "when_requested_and_applicable",
+      "pbr_maps": false,
+      "lod": false,
+      "view_comparison": false,
+      "outputs": ["GLB", "BLEND", "preview", "point cloud", "validation"]
+    },
+    "3": {
+      "name": "Täiustatud",
+      "description": "Koeratesti töövoog: anatoomilised sügavushinnangud, UV/PBR, vajalikud eraldi detailid, deformatsiooni kontroll, LOD ja vaadete võrdlus.",
+      "example_recipe": "dog_mudelitehas",
+      "materials": "UV_PBR_basecolor_normal_roughness",
+      "rig": "when_requested_and_applicable",
+      "pbr_maps": true,
+      "lod": true,
+      "view_comparison": true,
+      "outputs": ["GLB", "BLEND", "LOD GLB", "preview", "point cloud", "multi_view_comparison", "validation"]
+    }
+  }
+}
