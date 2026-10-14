@@ -1,0 +1,73 @@
+name: Blender soldier and Three.js
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/blender-threejs.yml'
+      - 'scripts/**'
+      - 'site/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: blender-cloud-pages
+  cancel-in-progress: true
+
+jobs:
+  blender:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+          blender --version
+
+      - name: Generate soldier GLB, BLEND and previews
+        run: blender --background --factory-startup --python-exit-code 1 --python scripts/create_soldier.py
+
+      - name: Verify the generated files
+        run: |
+          test -s output/soldier.glb
+          test -s output/soldier.blend
+          test -s output/preview_front.png
+          test -s output/preview_side.png
+          cp output/soldier.glb site/models/soldier.glb
+          cp output/preview_front.png site/preview_front.png
+          cp output/preview_side.png site/preview_side.png
+          du -h output/*
+
+      - name: Upload downloadable Blender files
+        uses: actions/upload-artifact@v4
+        with:
+          name: soldier-build-output
+          path: output/
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload viewer site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+  deploy:
+    needs: blender
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.publish.outputs.page_url }}
+    steps:
+      - name: Publish site
+        id: publish
+        uses: actions/deploy-pages@v4
