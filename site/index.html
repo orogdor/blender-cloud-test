@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="et">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a1620">
+<title>Blender Cloud • Three.js 3D-sõdur</title>
+<style>
+:root {color-scheme:dark;--text:#e9f5f4;--muted:#acc0c8;--green:#78e4bd;}
+* {box-sizing:border-box;}
+html,body {margin:0;min-height:100%;font:14px system-ui,-apple-system,Segoe UI,sans-serif;background:#07131c;color:var(--text);}
+main {height:100dvh;min-height:450px;overflow:hidden;position:relative;background:radial-gradient(circle at 50% 38%,#254655 0,#112934 48%,#07131c 100%);}
+canvas {display:block;position:absolute;inset:0;width:100%;height:100%;touch-action:none;}
+header {position:absolute;inset:max(14px,env(safe-area-inset-top)) 14px auto;pointer-events:none;display:flex;justify-content:space-between;gap:8px;align-items:start;}
+header>*{pointer-events:auto}h1{font-size:clamp(19px,4vw,28px);margin:5px 0 6px;letter-spacing:-.03em}.kicker{color:var(--green);font-size:11px;letter-spacing:.15em;font-weight:800}.desc{color:var(--muted);font-size:12px;max-width:320px;line-height:1.5}.status{border:1px solid #ffffff29;background:#071924c9;border-radius:50px;padding:9px 12px;font-size:11px;white-space:nowrap;}
+.controls {position:absolute;bottom:max(12px,env(safe-area-inset-bottom));left:12px;right:12px;display:flex;flex-direction:column;align-items:center;gap:9px;pointer-events:none;}
+.buttons {pointer-events:auto;border:1px solid #ffffff24;display:flex;gap:7px;flex-wrap:wrap;justify-content:center;background:#071924dc;padding:9px;border-radius:18px;backdrop-filter:blur(16px);box-shadow:0 10px 35px #0005;max-width:700px;}
+button,a.download{font:600 12px system-ui;border-radius:10px;background:#233946;border:1px solid #ffffff23;color:var(--text);padding:10px 12px;min-height:39px;text-decoration:none;cursor:pointer;touch-action:manipulation;}
+button.selected{background:#276a61;border-color:#76dcb875}.download{background:#2d725f!important}
+.metrics{font-size:11px;color:#ccdedf;display:flex;gap:7px;flex-wrap:wrap;justify-content:center;text-shadow:0 2px 5px #0008}
+.metrics span{background:#071924ba;border:1px solid #ffffff10;border-radius:99px;padding:4px 9px}
+#loading{pointer-events:none;position:absolute;top:53%;left:50%;transform:translate(-50%,-50%);padding:13px 20px;border-radius:13px;min-width:180px;text-align:center;background:#07151ccc;border:1px solid #ffffff24;color:#dbefea}
+@media(max-width:390px){header{left:11px;right:11px}.buttons{gap:5px;padding:7px}button,a.download{font-size:11px;padding:9px}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
+</head>
+<body><main id="stage">
+<header>
+ <div><div class="kicker">BLENDER CLOUD / THREE.JS</div><h1>3D-sõdur • katsemudel</h1><div class="desc">Pööra sõrmega, suumi kahe sõrmega. Mudel luuakse automaatselt Blenderiga GitHub Actionsis.</div></div>
+ <div class="status" id="status">Laen mudelit…</div>
+</header>
+<div id="loading">Laen GLB 3D-mudelit…</div>
+<div class="controls">
+ <div class="metrics"><span id="tris">Kolmnurgad: …</span><span id="parts">Osad: …</span><span id="height">Kõrgus: …</span></div>
+ <div class="buttons">
+  <button id="front">Eest</button><button id="side">Küljelt</button><button id="back">Tagant</button>
+  <button id="rotate" class="selected">↻ Pöörlemine</button><button id="wire">Traatvõrk</button>
+  <button id="reset">Lähtesta</button><a class="download" href="models/soldier.glb" download="soldier.glb">↓ GLB</a>
+ </div>
+</div>
+</main>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+const $=id=>document.getElementById(id);
+const stage=$("stage");
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(42,1,.05,100);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:"high-performance"});
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));
+renderer.setSize(stage.clientWidth,stage.clientHeight);
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.45;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.insertBefore(renderer.domElement,stage.firstChild);
+scene.add(new THREE.HemisphereLight(0xc4efff,0x403d38,2.5));
+const key=new THREE.DirectionalLight(0xffe3c5,3.7);
+key.position.set(3,6,4);key.castShadow=true;key.shadow.mapSize.set(1024,1024);
+key.shadow.camera.left=-4;key.shadow.camera.right=4;key.shadow.camera.top=5;key.shadow.camera.bottom=-5;
+scene.add(key);
+const rim=new THREE.DirectionalLight(0x8cefd0,2);rim.position.set(-4,3,-3);scene.add(rim);
+const floor=new THREE.Mesh(new THREE.CircleGeometry(3.1,64),new THREE.MeshStandardMaterial({color:0x27414a,roughness:.94}));
+floor.rotation.x=-Math.PI/2;floor.position.y=-.04;floor.receiveShadow=true;scene.add(floor);
+const grid=new THREE.GridHelper(5,20,0x64958f,0x3b5a61);
+grid.position.y=.001;grid.material.transparent=true;grid.material.opacity=.26;scene.add(grid);
+const orbit=new OrbitControls(camera,renderer.domElement);
+orbit.enableDamping=true;orbit.dampingFactor=.075;orbit.enablePan=false;orbit.minDistance=1.2;orbit.maxDistance=12;
+const turntable=new THREE.Group();scene.add(turntable);
+let model=null,autospin=true,wire=false,dist=4;
+function view(which){
+ const target=new THREE.Vector3(0,1,0);orbit.target.copy(target);
+ const poses={front:[0,1.36,dist],side:[dist,1.36,0],back:[0,1.36,-dist],default:[dist*.74,1.6,dist*.88]};
+ camera.position.set(...(poses[which]||poses.default));orbit.update();
+}
+function stopSpin(){autospin=false;$("rotate").classList.remove("selected");}
+for(const which of ["front","side","back"]){
+ $(which).onclick=()=>{stopSpin();view(which)};
+}
+$("rotate").onclick=()=>{autospin=!autospin;$("rotate").classList.toggle("selected",autospin)};
+function setWire(value){wire=value;if(model)model.traverse(o=>{if(o.isMesh){const mats=Array.isArray(o.material)?o.material:[o.material];mats.forEach(m=>m.wireframe=value)}});$("wire").classList.toggle("selected",value);}
+$("wire").onclick=()=>setWire(!wire);
+$("reset").onclick=()=>{turntable.rotation.y=0;autospin=true;$("rotate").classList.add("selected");setWire(false);view("default")};
+view("default");
+new GLTFLoader().load("models/soldier.glb",gltf=>{
+ model=gltf.scene;turntable.add(model);
+ model.updateMatrixWorld(true);
+ const bounds=new THREE.Box3().setFromObject(model);
+ const dim=bounds.getSize(new THREE.Vector3());
+ if(dim.z>dim.y*1.25){model.rotation.x=-Math.PI/2;model.updateMatrixWorld(true);}
+ bounds.setFromObject(model);
+ const mid=bounds.getCenter(new THREE.Vector3());
+ model.position.x-=mid.x;model.position.z-=mid.z;model.position.y-=bounds.min.y;
+ model.updateMatrixWorld(true);bounds.setFromObject(model);
+ const h=bounds.getSize(new THREE.Vector3()).y;
+ model.scale.multiplyScalar(2/Math.max(.001,h));
+ model.updateMatrixWorld(true);bounds.setFromObject(model);model.position.y-=bounds.min.y;
+ let triangles=0,parts=0;
+ model.traverse(o=>{if(!o.isMesh)return;parts++;o.castShadow=true;o.receiveShadow=true;
+  const geo=o.geometry;triangles+=(geo.index?geo.index.count:geo.attributes.position.count)/3;
+ });
+ $("tris").textContent="Kolmnurgad: "+Math.round(triangles).toLocaleString("et-EE");
+ $("parts").textContent="Osad: "+parts;
+ $("height").textContent="Kõrgus: 2 ühikut";
+ $("status").textContent="✓ Mudel valmis";
+ $("loading").style.display="none";
+ view("default");
+},undefined,error=>{
+ console.error(error);$("status").textContent="Laadimise viga";
+ $("loading").textContent="GLB ei avanenud. Kontrolli GitHub Actionsi töövoogu ja Pagesi seadeid.";
+});
+function resize(){
+ const w=stage.clientWidth,h=stage.clientHeight;
+ camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);
+}
+window.addEventListener("resize",resize);resize();
+let last=performance.now();
+function frame(now){
+ requestAnimationFrame(frame);
+ const dt=Math.min(.05,(now-last)/1000);last=now;
+ if(autospin&&model)turntable.rotation.y+=dt*.18;
+ orbit.update();renderer.render(scene,camera);
+}
+requestAnimationFrame(frame);
+</script></body></html>
