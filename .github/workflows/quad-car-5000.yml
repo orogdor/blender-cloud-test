@@ -1,0 +1,48 @@
+name: Single Mesh Quad Car 5000
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'quadcar/create_quad_car_5000.py'
+      - '.github/workflows/quad-car-5000.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy python3-pil
+          blender --version
+      - name: Generate exactly 5000 quads, BLEND, GLB and five views
+        run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python quadcar/create_quad_car_5000.py
+      - name: Validate deliverables and geometry
+        run: |
+          test -s output/quad_car_5000/quad_car_5000.glb
+          test -s output/quad_car_5000/quad_car_5000.blend
+          test -s output/quad_car_5000/preview.png
+          test -s output/quad_car_5000/front.png
+          test -s output/quad_car_5000/rear.png
+          test -s output/quad_car_5000/side.png
+          test -s output/quad_car_5000/top.png
+          python3 - <<'PYCODE'
+          import json
+          with open('output/quad_car_5000/stats.json') as f: d=json.load(f)
+          assert d['mesh_objects']==1, d
+          assert d['quad_faces']==5000, d
+          assert d['nonmanifold_edges']==0, d
+          assert d['connected_components']==5, d
+          print('Validated:', d)
+          PYCODE
+      - name: Upload downloadable Blender / GLB / PNG files
+        uses: actions/upload-artifact@v4
+        with:
+          name: quad-car-5000-quads
+          path: output/quad_car_5000/
+          if-no-files-found: error
+          retention-days: 30
