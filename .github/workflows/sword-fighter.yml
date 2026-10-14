@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'scripts/create_sword_fighter.py'
+      - 'scripts/render_fighter.py'
       - '.github/workflows/sword-fighter.yml'
 jobs:
   build:
@@ -40,6 +41,8 @@ jobs:
           assert os.path.isfile('fighter_output/sword_fighter.blend')
           print('FIGHTER_GLB_VALIDATED')
           PY
+      - name: Render front, side and sword attack previews
+        run: blender -b --factory-startup --python-exit-code 1 --python scripts/render_fighter.py
       - name: Upload model, even for failed diagnostic builds
         if: always()
         uses: actions/upload-artifact@v4
