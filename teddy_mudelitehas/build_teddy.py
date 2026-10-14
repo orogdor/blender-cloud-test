@@ -127,7 +127,7 @@ def rig_teddy(ob):
  for v in ob.data.vertices:
   p=v.co;x,y,z=p;side='L' if x>=0 else 'R'
   if z>1.18:names=['head','neck']
-  elif abs(x)>.32 and .58<z<1.13:names=['upper_arm.'+side,'forearm.'+side,'paw.'+side,'chest']
+  elif abs(x)>.32 and .48<z<1.13:names=['upper_arm.'+side,'forearm.'+side,'paw.'+side,'chest']
   elif z<.48:names=['thigh.'+side,'shin.'+side,'foot.'+side,'hips']
   else:names=['hips','spine','chest','neck','head']
   distances=[bone_dist(p,*specs[name][:2]) for name in names]
