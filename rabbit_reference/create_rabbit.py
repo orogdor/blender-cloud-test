@@ -98,6 +98,8 @@ def build():
     print('QUADRIFLOW_START',TARGET_FACES,flush=True)
     bpy.ops.object.quadriflow_remesh(target_faces=TARGET_FACES,seed=0,
                                   use_preserve_sharp=False,use_preserve_boundary=False)
+    relax=rabbit.modifiers.new('Relax_quad_contour','SMOOTH');relax.factor=.32;relax.iterations=2
+    bpy.ops.object.modifier_apply(modifier=relax.name)
     report=check(rabbit);print('QUADRIFLOW_CHECK',report,flush=True)
     white=material('Ivory_mesh',(.76,.73,.67,1),.58)
     eyes=material('Eyes',(.025,.022,.018,1),.15)
@@ -168,7 +170,7 @@ def render(rabbit,cloud):
     wire=rabbit.modifiers.new('Topology_preview','WIREFRAME');wire.thickness=.0016;wire.use_replace=False;wire.material_offset=4
     for name,loc,target in [('front',(0,-7,1.5),(0,0,1.5)),('side',(7,0,1.5),(0,0,1.5)),
                             ('rear',(0,7,1.5),(0,0,1.5)),('top',(0,0,7),(0,0,0))]:
-        camera.location=loc;aim(camera,target);camera.data.ortho_scale=3.7
+        camera.location=loc;aim(camera,target);camera.data.ortho_scale=4.15
         scene.render.filepath=str(OUT/(name+'.png'));bpy.ops.render.render(write_still=True)
     rabbit.modifiers.remove(wire)
     camera.location=(4,-6,3.2);aim(camera,(0,0,1.45));camera.data.ortho_scale=3.85
