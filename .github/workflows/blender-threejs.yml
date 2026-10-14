@@ -41,6 +41,7 @@ jobs:
           test -s output/soldier.blend
           test -s output/preview_front.png
           test -s output/preview_side.png
+          mkdir -p site/models
           cp output/soldier.glb site/models/soldier.glb
           cp output/preview_front.png site/preview_front.png
           cp output/preview_side.png site/preview_side.png
