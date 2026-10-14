@@ -20,7 +20,7 @@ concurrency:
 jobs:
   blender:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -58,6 +58,36 @@ jobs:
         with:
           name: vector-cat-blender-glb-and-previews
           path: output/vector_cat/
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Build reference car from custom vertex surfaces
+        run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python scripts/create_vector_car.py
+
+      - name: Verify car export and stage phone viewer
+        run: |
+          test -s output/vector_car/vector_car.glb
+          test -s output/vector_car/vector_car.blend
+          test -s output/vector_car/preview.png
+          test -s output/vector_car/front.png
+          test -s output/vector_car/side.png
+          test -s output/vector_car/rear.png
+          test -s output/vector_car/top.png
+          test -s output/vector_car/stats.json
+          mkdir -p site/car/models
+          cp output/vector_car/vector_car.glb site/car/models/vector_car.glb
+          cp output/vector_car/preview.png site/car/preview.png
+          cp output/vector_car/front.png site/car/front.png
+          cp output/vector_car/side.png site/car/side.png
+          cp output/vector_car/rear.png site/car/rear.png
+          cp output/vector_car/top.png site/car/top.png
+          cat output/vector_car/stats.json
+
+      - name: Upload car Blender source, GLB and renders
+        uses: actions/upload-artifact@v4
+        with:
+          name: vector-car-reference-build
+          path: output/vector_car/
           retention-days: 30
           if-no-files-found: error
 
