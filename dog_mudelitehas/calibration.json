@@ -1,0 +1,54 @@
+{
+  "front": {
+    "source_cell": [
+      0,
+      0
+    ],
+    "horizontal_flip": false,
+    "meters_per_pixel": 0.0025974025974025974,
+    "torso_center_pixel": 268.0,
+    "top_pixel": 41,
+    "ground_pixel": 734,
+    "camera": "estimated orthographic",
+    "back_tail_orientation_correction": false
+  },
+  "left": {
+    "source_cell": [
+      1,
+      0
+    ],
+    "horizontal_flip": false,
+    "meters_per_pixel": 0.002616279069767442,
+    "torso_center_pixel": 273.0,
+    "top_pixel": 43,
+    "ground_pixel": 731,
+    "camera": "estimated orthographic",
+    "back_tail_orientation_correction": false
+  },
+  "back": {
+    "source_cell": [
+      0,
+      1
+    ],
+    "horizontal_flip": false,
+    "meters_per_pixel": 0.0026124818577648768,
+    "torso_center_pixel": 269.5,
+    "top_pixel": 1,
+    "ground_pixel": 690,
+    "camera": "estimated orthographic",
+    "back_tail_orientation_correction": true
+  },
+  "right": {
+    "source_cell": [
+      1,
+      1
+    ],
+    "horizontal_flip": true,
+    "meters_per_pixel": 0.0025974025974025974,
+    "torso_center_pixel": 311.25,
+    "top_pixel": 9,
+    "ground_pixel": 702,
+    "camera": "estimated orthographic",
+    "back_tail_orientation_correction": false
+  }
+}

@@ -1,0 +1,47 @@
+name: Mudelitehas Dog SitPretty realism test
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'dog_mudelitehas/**'
+      - '.github/workflows/dog-mudelitehas.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and point cloud tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy python3-scipy python3-pil python3-venv
+          python3 -m venv --system-site-packages /tmp/dog-venv
+          /tmp/dog-venv/bin/pip install open3d==0.19.0
+      - name: Four image views to oriented cloud to Poisson surface
+        run: /tmp/dog-venv/bin/python dog_mudelitehas/reconstruct_dog.py
+      - name: Reconstruct mesh bake PBR maps rig animate validate and render
+        run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python dog_mudelitehas/build_dog.py
+      - name: Validate 3D files and actual skin animation
+        run: |
+          python3 - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('output/dog_mudelitehas');d=json.loads((p/'validation.json').read_text())
+          assert d['body_quad_faces']==100000 and d['components']==1,d
+          assert d['boundary_edges']==0 and d['nonmanifold_edges']==0,d
+          assert d['high_detail_glb']['skins'] and d['high_detail_glb']['animations'],d
+          assert d['high_detail_glb']['textures']>=3,d
+          assert d['max_vertex_motion']>.008 and d['animation_loop_seam']<1e-5,d
+          for n in ['Dog_SitPretty_100000.glb','Dog_SitPretty_LOD.glb','Dog_SitPretty_100000.blend','Dog_SitPretty.gif']:
+            assert (p/n).stat().st_size>0,n
+          print(d)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dog-mudelitehas-sitpretty-realism
+          path: output/dog_mudelitehas/
+          if-no-files-found: error
+          retention-days: 30
