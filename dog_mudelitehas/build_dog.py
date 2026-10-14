@@ -293,7 +293,11 @@ def deformation_checks(body,rig):
  rest=np.array([tuple(v.co) for v in body.data.vertices]);edges=np.array([tuple(e.vertices) for e in body.data.edges]);rest_len=np.linalg.norm(rest[edges[:,0]]-rest[edges[:,1]],axis=1)
  for f in (1,7,13,19,25,31,37,43,49):
   scene.frame_set(f);ev=body.evaluated_get(bpy.context.evaluated_depsgraph_get());m=ev.to_mesh();a=np.empty(len(m.vertices)*3,dtype='float32');m.vertices.foreach_get('co',a);a=a.reshape(-1,3).copy();ev.to_mesh_clear();co.append(a);mins.append(float(a[:,2].min()))
-  ratios=np.linalg.norm(a[edges[:,0]]-a[edges[:,1]],axis=1)/np.maximum(rest_len,1e-7);edge_ratio.append(float(np.quantile(ratios,.999)))
+  posed_len=np.linalg.norm(a[edges[:,0]]-a[edges[:,1]],axis=1)
+  # Division by a near-zero remeshing edge is not a meaningful skin stretch
+  # metric. Check meaningful edges relatively and tiny edges absolutely.
+  valid=rest_len>.001;ratios=posed_len[valid]/rest_len[valid];edge_ratio.append(float(np.quantile(ratios,.999)))
+  assert np.max(np.abs(posed_len[~valid]-rest_len[~valid]))<.005,'Tiny-edge absolute deformation exceeds 5 mm'
  assert np.isfinite(co).all(),'Non-finite animation';movement=np.linalg.norm(co[4]-co[0],axis=1)
  assert movement.max()>.008,'Animation is not deforming the actual skin'
  if max(edge_ratio)>=2.0:
@@ -415,6 +419,7 @@ def main():
  print('RECONSTRUCTED_SURFACE_CHECK',validate(body),flush=True)
  bpy.ops.object.quadriflow_remesh(target_faces=5800,seed=4,use_preserve_sharp=False,use_preserve_boundary=False)
  print('QUAD_RETOPOLOGY_CHECK',validate(body,True),flush=True);exact_quads(body)
+ relax=body.modifiers.new('Relax_coincident_quadri_edges','SMOOTH');relax.factor=.25;relax.iterations=3;bpy.ops.object.modifier_apply(modifier=relax.name)
  rig,specs=rig_dog(body);report=validate(body,True);assert report['quad_faces']==100000,report
  setup_material(body);details=add_face_details(body,rig);fur=add_short_fur(body,rig)
  body.data.color_attributes.remove(body.data.color_attributes['intrinsic_albedo'])
