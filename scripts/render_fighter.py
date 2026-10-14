@@ -7,11 +7,26 @@ bpy.ops.wm.open_mainfile(filepath=os.path.join(OUT,"sword_fighter.blend"))
 scene=bpy.context.scene
 rig=bpy.data.objects.get("FighterRig")
 if rig is None:raise RuntimeError("Missing FighterRig")
-scene.render.engine="BLENDER_WORKBENCH"
-scene.display.shading.color_type="MATERIAL"
-scene.display.shading.light="STUDIO"
-scene.display.shading.show_shadows=True
-scene.display.shading.show_cavity=True
+scene.render.engine="CYCLES"
+scene.cycles.device="CPU"
+scene.cycles.samples=14
+scene.render.threads_mode="FIXED"
+scene.render.threads=2
+for vl in scene.view_layers:
+    vl.cycles.use_denoising=False
+world=scene.world or bpy.data.worlds.new("Preview world")
+scene.world=world
+world.use_nodes=True
+world.node_tree.nodes.get("Background").inputs["Color"].default_value=(0.42,0.46,0.54,1)
+world.node_tree.nodes.get("Background").inputs["Strength"].default_value=0.9
+def add_light(name,pos,power,size):
+    bpy.ops.object.light_add(type="AREA",location=pos)
+    light=bpy.context.object;light.name=name;light.data.energy=power
+    light.data.shape="DISK";light.data.size=size
+    light.rotation_euler=(Vector((0,0,1.1))-light.location).to_track_quat("-Z","Y").to_euler()
+add_light("Key",(2,-4,4),470,4)
+add_light("Fill",(-3,-2,3),300,4)
+add_light("Rim",(0,3,4),580,3)
 scene.render.image_settings.file_format="PNG"
 scene.render.resolution_x=560
 scene.render.resolution_y=720
