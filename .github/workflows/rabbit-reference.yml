@@ -1,0 +1,39 @@
+name: Rabbit Reference Point Cloud and Mesh
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'rabbit_reference/**'
+      - '.github/workflows/rabbit-reference.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy python3-pil
+      - name: Build rabbit, point cloud, mesh and reference views
+        run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python rabbit_reference/create_rabbit.py
+      - name: Check connected watertight output
+        run: |
+          test -s output/rabbit_reference/rabbit_point_cloud_mesh.blend
+          test -s output/rabbit_reference/rabbit_point_cloud_and_mesh.png
+          python3 - <<'PY'
+          import json
+          r=json.load(open('output/rabbit_reference/kontroll.json'))
+          assert r['components']==1 and r['boundary_edges']==0 and r['nonmanifold_edges']==0, r
+          assert r['nonmanifold_vertices']==0 and r['loose_vertices']==0, r
+          print(r)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rabbit-point-cloud-mesh
+          path: output/rabbit_reference/
+          if-no-files-found: error
+          retention-days: 30
