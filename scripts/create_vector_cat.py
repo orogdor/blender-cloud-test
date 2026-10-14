@@ -205,12 +205,16 @@ def ear_mesh(name,x):
     verts=outer+back
     faces=[(0,3,4),(4,3,2),(3,1,2),
            (5,9,8),(9,7,8),(8,7,6),
-           (0,5,8,3),(3,8,7,1),(1,7,2),(2,7,9,4),(4,9,5,0)]
+           (0,4,9,5),(4,2,7,9),(2,1,6,7),(1,3,8,6),(3,0,5,8)]
     # Ear is sculpted using 5 face vertices + inner triangle facing front.
     ob=mesh_obj(name,verts,faces,[FUR])
     inner=[(x-s*.036,-.590,.907),(x+s*.033,-.584,.912),
            (x+s*.023,-.510,1.053),(x,-.606,.935)]
-    mesh_obj(name+' salmon inner ear',inner,[(0,3,2),(3,1,2)],[EAR])
+    back=[(vx,vy+.003,vz) for vx,vy,vz in inner]
+    ear_vertices=inner+back
+    ear_faces=[(0,3,2),(3,1,2),(4,6,7),(7,6,5),
+               (0,2,6,4),(2,1,5,6),(1,3,7,5),(3,0,4,7)]
+    mesh_obj(name+' salmon inner ear',ear_vertices,ear_faces,[EAR],smooth=False)
     return ob
 for a in (-.126,.126):ear_mesh(('Left' if a>0 else 'Right')+' triangular ear',a)
 
@@ -221,7 +225,18 @@ def ellipse_patch(name,cx,cy,cz,radx,radz,mat,n=20,angle=0):
         a=TAU*k/n
         dx=radx*math.cos(a); dz=radz*math.sin(a)
         verts.append((cx+dx*math.cos(angle)-dz*math.sin(angle),cy,cz+dx*math.sin(angle)+dz*math.cos(angle)))
-    faces=[(0,k+1,(k+1)%n+1) for k in range(n)]
+    # Closed, paper-thin polygon volume instead of a non-manifold disc.
+    backcenter=len(verts)
+    verts.append((cx,cy+.004,cz))
+    for k in range(n):
+        vx,vy,vz=verts[k+1]
+        verts.append((vx,vy+.004,vz))
+    faces=[]
+    for k in range(n):
+        nxt=(k+1)%n
+        faces.append((0,k+1,nxt+1))
+        faces.append((backcenter,backcenter+nxt+1,backcenter+k+1))
+        faces.append((k+1,backcenter+k+1,backcenter+nxt+1,nxt+1))
     return mesh_obj(name,verts,faces,[mat],smooth=False)
 for side in (-1,1):
     x=side*.09
