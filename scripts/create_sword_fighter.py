@@ -45,9 +45,8 @@ def box(name,loc,dims,mat,bone,bevel=.035):
         mod.width=bevel;mod.segments=2
         bpy.context.view_layer.objects.active=o
         bpy.ops.object.modifier_apply(modifier=mod.name)
-        n=o.modifiers.new("Weighted normals","WEIGHTED_NORMAL")
-        try: bpy.ops.object.modifier_apply(modifier=n.name)
-        except Exception: o.modifiers.remove(n)
+        # Keep stock Blender 4.0 normals; weighted normals require auto-smooth
+        # and only produce warnings for these small low-poly parts.
     meshes.append(o);assignments[o.name]=bone
     return o
 
