@@ -88,6 +88,7 @@ def build():
     for ob in parts:ob.select_set(True)
     bpy.context.view_layer.objects.active=parts[0];bpy.ops.object.join()
     rabbit=bpy.context.object;rabbit.name='02_Rabbit_Connected_Mesh'
+    bpy.ops.object.transform_apply(location=True,rotation=False,scale=False)
     rem=rabbit.modifiers.new('Fuse_to_closed_surface','REMESH');rem.mode='VOXEL';rem.voxel_size=VOXEL_SIZE
     rem.use_smooth_shade=True;bpy.ops.object.modifier_apply(modifier=rem.name)
     smooth=rabbit.modifiers.new('Relax_surface','SMOOTH');smooth.factor=.7;smooth.iterations=5
