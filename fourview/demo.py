@@ -3,6 +3,8 @@ No external AI images needed for this test; in real use images come from prompts
 """
 import os, sys, math, json
 import bpy
+import bmesh
+from mathutils import Vector
 from array import array
 
 ROOT=os.path.abspath(os.path.join(os.path.dirname(__file__),'..'))
@@ -52,11 +54,45 @@ obj.data.materials.append(mat)
 verts=len(obj.data.vertices);faces=len(obj.data.polygons)
 assert verts > 100 and faces > 100,(verts,faces)
 assert all(len(poly.vertices)==4 for poly in obj.data.polygons)
+bm=bmesh.new()
+bm.from_mesh(obj.data)
+nonmanifold=sum(not edge.is_manifold for edge in bm.edges)
+bm.free()
+assert nonmanifold==0, 'Non-manifold edge count: %d' % nonmanifold
+
 
 # Export while the mesh is selected.
 bpy.ops.export_scene.gltf(filepath=os.path.join(OUT,'four_view_mesh.glb'),export_format='GLB',use_selection=True)
+# A real rendered preview, to inspect model form before importing into a game.
+scene=bpy.context.scene
+scene.render.engine='CYCLES'
+scene.cycles.samples=12
+for layer in scene.view_layers:
+    layer.cycles.use_denoising=False
+scene.render.resolution_x=540
+scene.render.resolution_y=540
+scene.render.resolution_percentage=100
+scene.render.film_transparent=True
+scene.render.image_settings.file_format='PNG'
+world=bpy.data.worlds.new('Four-view world')
+world.use_nodes=True
+world.node_tree.nodes['Background'].inputs['Strength'].default_value=.7
+scene.world=world
+bpy.ops.object.camera_add(location=(3.2,-4,2.7))
+cam=bpy.context.object
+cam.rotation_euler=(Vector((0,0,1.1))-cam.location).to_track_quat('-Z','Y').to_euler()
+cam.data.type='ORTHO'
+cam.data.ortho_scale=3.1
+scene.camera=cam
+bpy.ops.object.light_add(type='AREA',location=(2,-3,4))
+lamp=bpy.context.object
+lamp.data.energy=600
+lamp.data.size=4
+lamp.rotation_euler=(Vector((0,0,1.0))-lamp.location).to_track_quat('-Z','Y').to_euler()
+scene.render.filepath=os.path.join(OUT,'preview.png')
+bpy.ops.render.render(write_still=True)
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT,'four_view_mesh.blend'))
 with open(os.path.join(OUT,'stats.json'),'w') as fp:
     json.dump({'blender_version':bpy.app.version_string,'vertices':verts,'quads':faces,
-               'silhouettes':list(paths.keys()),'volume_voxels':int(obj['occupied_voxels'])},fp,indent=2)
+               'silhouettes':list(paths.keys()),'volume_voxels':int(obj['occupied_voxels']), 'nonmanifold_edges':nonmanifold},fp,indent=2)
 print('FOUR_VIEW_MESH_SUCCESS',verts,faces)
