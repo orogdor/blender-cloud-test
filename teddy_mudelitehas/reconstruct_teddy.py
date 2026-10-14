@@ -19,6 +19,25 @@ right=sdf(data['right_mask'],(z[1]-z[0],y[1]-y[0])).T[None,:,:]
 front,back,left,right=[a[...,::-1] for a in (front,back,left,right)]
 tau=.021
 phi=-tau*np.logaddexp(np.logaddexp(-front/tau,-back/tau),np.logaddexp(-left/tau,-right/tau))
+# Four silhouettes cannot determine local appendage thickness: use explicit
+# depth priors at the CLOUD stage, before creating any mesh. These are labelled
+# estimates rather than claiming measured depths from a four-view image sheet.
+xx=x[:,None,None];yy=y[None,:,None];zz=z[None,None,:]
+arm_region=(np.abs(xx)>.32)&(zz>.56)&(zz<1.115)
+arm_depth=.145-np.abs(yy+.005)
+rounded_arm=-tau*np.logaddexp(-phi/tau,-arm_depth/tau)
+phi=np.where(arm_region,rounded_arm,phi)
+# Round head cross sections using per-row widths/depths from the source masks.
+fm=(data['front_mask']&data['back_mask'])[::-1]
+sm=(data['left_mask']&data['right_mask'])[::-1]
+for k,zk in enumerate(z):
+ if zk<1.115:continue
+ xs=np.flatnonzero(fm[k]);ys=np.flatnonzero(sm[k])
+ if len(xs)<3 or len(ys)<3:continue
+ rx=max(abs(x[xs[0]]),abs(x[xs[-1]]));cy=(y[ys[0]]+y[ys[-1]])/2;ry=(y[ys[-1]]-y[ys[0]])/2
+ if rx<.015 or ry<.015:continue
+ ellipse=(1-np.sqrt((x[:,None]/rx)**2+((y[None,:]-cy)/ry)**2))*min(rx,ry)
+ phi[:,:,k]=np.minimum(phi[:,:,k],ellipse)
 phi=gaussian_filter(phi,.9)
 inside=phi>0
 labels,n=label(inside);count=np.bincount(labels.ravel());count[0]=0;inside=labels==count.argmax()
@@ -36,7 +55,7 @@ with (OUT/'04_point_cloud.ply').open('w') as f:
 print('POINT_CLOUD_SAVED_BEFORE_MESH',len(points),flush=True)
 report={'pipeline':['2D concept','4 AI orthographic views','alpha silhouette alignment','visual-hull surface points','Poisson surface reconstruction','quad retopology','rig','running animation'],
  'cloud_points':len(points),'grid_shape':list(phi.shape),'point_cloud_source':'Boundary of softened four-view silhouette intersection; NOT sampled from mesh',
- 'calibration':'estimated orthographic scale, aligned by image height and bounding-box center',
+ 'calibration':'estimated orthographic scale, aligned by image height and bounding-box center; arm thickness and rounded head depth inferred at point-cloud stage',
  'limitation':'AI views can disagree; silhouettes do not recover hidden cavities or exact plush details'}
 (OUT/'pipeline.json').write_text(json.dumps(report,indent=2))
 for name in ('front','back','left','right'):

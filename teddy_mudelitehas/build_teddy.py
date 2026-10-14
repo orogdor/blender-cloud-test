@@ -149,8 +149,9 @@ def color_teddy(ob):
  xmin,xmax=images['x'][0],images['x'][-1];ymin,ymax=images['y'][0],images['y'][-1];zmin,zmax=images['z'][0],images['z'][-1]
  for v in ob.data.vertices:
   x,y,z=v.co;nx,ny,nz=v.normal
-  if abs(ny)>=abs(nx)*.65:name='front' if ny<0 else 'back';u=(x-xmin)/(xmax-xmin)
-  else:name='left' if nx>0 else 'right';u=(y-ymin)/(ymax-ymin)
+  # Side projections can duplicate the muzzle/eyes onto unrelated surface
+  # regions. Use registered front/back colors for the bilateral plush design.
+  name='front' if y<0 else 'back';u=(x-xmin)/(xmax-xmin)
   rgba=images[name+'_rgba'];h,w=rgba.shape[:2];iv=(zmax-z)/(zmax-zmin)*(h-1);iu=u*(w-1)
   iu=max(0,min(w-1,iu));iv=max(0,min(h-1,iv));i,j=int(iu),int(iv);ii,jj=min(i+1,w-1),min(j+1,h-1);tx,ty=iu-i,iv-j
   p=rgba[j,i]*(1-tx)*(1-ty)+rgba[j,ii]*tx*(1-ty)+rgba[jj,i]*(1-tx)*ty+rgba[jj,ii]*tx*ty
@@ -173,7 +174,7 @@ def animate(rig):
   pb.rotation_quaternion=Quaternion(local_axis.normalized(),angle)
  for frame in range(1,FRAMES+2):
   t=2*math.pi*(frame-1)/FRAMES
-  root=rig.pose.bones['root'];root.location=(0,0,.055+.04*(1-math.cos(2*t)));root.keyframe_insert('location',frame=frame)
+  root=rig.pose.bones['root'];root.location=(0,.055+.04*(1-math.cos(2*t)),0);root.keyframe_insert('location',frame=frame)
   turn('hips',.09);turn('spine',.08);turn('chest',.055*math.sin(t),(0,0,1));turn('neck',-.11);turn('head',.025*math.sin(t),(0,1,0))
   for sign,side in ((1,'L'),(-1,'R')):
    phase=t+(0 if sign==1 else math.pi)
