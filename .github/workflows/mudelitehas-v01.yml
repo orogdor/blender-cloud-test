@@ -1,4 +1,4 @@
-name: Mudelitehas 0.1 - teddy test and release
+name: Mudelitehas 0.1.2 - multiview tests and release
 on:
   push:
     branches: [main]
@@ -30,6 +30,8 @@ jobs:
           python-version: '3.12'
           cache: pip
           cache-dependency-path: plugins/mudelitehas/skills/mudelitehas/assets/requirements.txt
+      - name: Install reconstruction dependencies
+        run: python -m pip install -r plugins/mudelitehas/skills/mudelitehas/assets/requirements.txt
       - name: Test package and exact original teddy checksums
         run: |
           python -m unittest discover -s tests/mudelitehas_v01 -v
@@ -42,8 +44,6 @@ jobs:
           key: blender-4.5.3-linux-x64-975c58fc-pillow-11.3.0
       - name: Prepare pinned Blender and Pillow
         run: python plugins/mudelitehas/skills/mudelitehas/scripts/install_runtime.py --directory ~/.cache/mudelitehas-runtime
-      - name: Install reconstruction dependencies
-        run: python -m pip install -r plugins/mudelitehas/skills/mudelitehas/assets/requirements.txt
       - name: Rebuild teddy from reviewed images and validate GLB reimport
         run: |
           python plugins/mudelitehas/skills/mudelitehas/scripts/run.py --workdir "$RUNNER_TEMP/mudelitehas-clean" --blender "$BLENDER" --preview none
@@ -112,11 +112,11 @@ jobs:
           Vana karu allpool on ajalooline kahe-suuna kordusnäidis ega vasta uue mudeli 0.1.2 reeglile.
           Avaldamiseks ette valmistatud portable plugin: laadi portaali üles ainult -plugin.zip fail.
           Sisaldab ametlikku manifesti, ikoone, karu eelvaadet ja repo pluginakataloogi.
-          OpenAI kataloogi üleslaadimine ning heakskiit on veel tegemata; mootor jääb 0.1.0 versiooni.
+          OpenAI kataloogi üleslaadimine ning heakskiit on veel tegemata; töövoo versioon on 0.1.2.
           Näidis on viimane jalutav mängukaru: põhikeha 10 000 nelinurka, 23 luud ja Walk_Loop.
           Mudelifailid on algse üle antud mudeli täpsed koopiad; canonical-manifest.json sisaldab räsisid.
           CI ehitab retsepti eraldi uuesti ja kontrollib eksporditud GLB animatsiooni.
-          Toetatud automaatne retsept: 10 000 nelinurgaga mängukaru; teised olendid vajavad eraldi arendust.
+          Uue töövoo automaatne retsept: 5000 nelinurgaga auto. Ajalooline 10 000 nelinurgaga karu on kordamiseks; teised objektid vajavad eraldi retsepti.
           Tagasiside: https://github.com/orogdor/blender-cloud-test/issues/new?template=mudelitehas-feedback.yml
           '''
           (dist/'release-notes.md').write_text(notes)
