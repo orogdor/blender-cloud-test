@@ -1,0 +1,71 @@
+{
+  "schema_version": 2,
+  "command": "Mudelitehas 10000 3 sitsiv koer animatsiooniga",
+  "quad_faces": 10000,
+  "level": 3,
+  "description": "sitsiv koer animatsiooniga",
+  "animation_requested": true,
+  "budget_scope": "primary_surface",
+  "pipeline": [
+    "2D concept in requested pose",
+    "four consistent views in rig-friendly rest pose",
+    "point cloud in rest pose",
+    "mesh in rest pose",
+    "skeleton and skin weights",
+    "animation from rest pose to requested pose",
+    "final pose comparison"
+  ],
+  "pose_plan": {
+    "subject_kind": "living",
+    "body_plan": "quadruped",
+    "reconstruction_pose": "quadruped_stand",
+    "requested_pose_description": "sitsiv koer animatsiooniga",
+    "target_pose_kind": "sit_pretty",
+    "requested_pose_reference_role": "identity_appearance_and_final_pose",
+    "four_view_reference_role": "same_identity_in_reconstruction_pose",
+    "neutral_reference_required": true,
+    "requires_rig": true,
+    "requires_anatomy_review": false,
+    "target_pose_created_by": "armature_deformation",
+    "animation_required": true,
+    "animation_steps": [
+      "rest_pose",
+      "transition_to_requested_pose",
+      "hold_requested_pose"
+    ],
+    "canonical_pose_guidance": "Standing naturally on all four feet, straight trunk, visible limb separation, relaxed head and tail; no seated or folded legs.",
+    "checks": [
+      "same_identity_across_references",
+      "same_neutral_pose_in_four_views",
+      "visible_or_anatomically_inferred_joints",
+      "organic_cross_section_depth",
+      "joint_edge_flow",
+      "skin_weights",
+      "self_intersection_in_target_pose",
+      "stance_contacts_in_target_pose",
+      "final_pose_against_requested_reference"
+    ]
+  },
+  "profile": {
+    "name": "Täiustatud",
+    "description": "Koeratesti töövoog: anatoomilised sügavushinnangud, UV/PBR, vajalikud eraldi detailid, deformatsiooni kontroll, LOD ja vaadete võrdlus.",
+    "example_recipe": "dog_mudelitehas",
+    "materials": "UV_PBR_basecolor_normal_roughness",
+    "rig": "when_requested_and_applicable",
+    "pbr_maps": true,
+    "lod": true,
+    "view_comparison": true,
+    "outputs": [
+      "GLB",
+      "BLEND",
+      "LOD GLB",
+      "preview",
+      "point cloud",
+      "multi_view_comparison",
+      "validation"
+    ],
+    "living_pose_policy": "pose_policy",
+    "example_recipe_status": "legacy_posed_reference_example; not a neutral-pose template"
+  },
+  "needs_prepared_reference_images": true
+}

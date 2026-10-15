@@ -1,0 +1,58 @@
+name: Mudelitehas - Tase 3 - Koer 10000 neutraalpoosist
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'dog_neutral_10000/**'
+      - '.github/workflows/dog-neutral-10000.yml'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Blender and point cloud reconstruction
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender python3-numpy python3-scipy python3-pil python3-venv
+          python3 -m venv --system-site-packages /tmp/dog-neutral-venv
+          /tmp/dog-neutral-venv/bin/pip install open3d==0.19.0
+      - name: Restore reviewed source images
+        run: |
+          python3 - <<'PY'
+          import base64,io,zipfile,pathlib
+          p=pathlib.Path('dog_neutral_10000')
+          with zipfile.ZipFile(io.BytesIO(base64.b85decode((p/'assets.b85').read_bytes()))) as z:
+            assert all('/' not in n and n.endswith(('.png','.jpg')) for n in z.namelist())
+            z.extractall(p)
+          PY
+      - name: Standing four views to cloud before Poisson mesh
+        env:
+          OPENBLAS_NUM_THREADS: '2'
+        run: /tmp/dog-neutral-venv/bin/python dog_neutral_10000/reconstruct.py
+      - name: Exactly 10000 quads PBR canine rig pose animation and render
+        run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python dog_neutral_10000/build.py
+      - name: Validate animated game asset
+        run: |
+          python3 - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('output/dog_neutral_10000');d=json.loads((p/'validation.json').read_text())
+          assert d['body_quad_faces']==10000 and d['quad_faces']==d['faces']==10000
+          assert d['components']==1 and d['boundary_edges']==d['nonmanifold_edges']==0
+          assert d['max_vertex_motion']>.3 and d['planted_hindfoot_max_motion']<.025
+          assert d['animated_glb']['skins'] and d['animated_glb']['animations'] and d['animated_glb']['textures']>=3
+          assert json.loads((p/'pipeline.json').read_text())['cloud_created_before_mesh']
+          for name in ['Dog_SitPretty_10000.glb','Dog_SitPretty_LOD.glb','Dog_SitPretty_10000.blend','Dog_Stand_to_SitPretty.gif']:
+            assert (p/name).stat().st_size>0
+          print(d)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dog-neutral-10000-level3
+          path: output/dog_neutral_10000/
+          if-no-files-found: error
+          retention-days: 30

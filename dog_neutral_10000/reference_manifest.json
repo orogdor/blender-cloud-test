@@ -1,0 +1,28 @@
+{
+  "schema_version": 2,
+  "reference_role": "rest_pose",
+  "body_plan": "quadruped",
+  "rest_pose": "quadruped_stand",
+  "views": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "same_identity": true,
+  "same_pose": true,
+  "registered_scale": true,
+  "limbs_separated": true,
+  "source_input_sha256": "858fcd044d9ace50c06c8d0ecff257e89b5abae41c0097efe4d92b489fbfd52e",
+  "requested_pose_reference": "01_requested_pose.jpg",
+  "visual_review": {
+    "status": "approved",
+    "reviewer": "Codex visual inspection of generated concept and four-view sheet",
+    "notes": [
+      "All four panels show standing quadruped, golden short coat, cream muzzle and chest, floppy ears.",
+      "Profile far-side feet are staggered by mild perspective; use symmetric anatomical estimates for hidden depth.",
+      "Front view occludes hind legs; side and rear identify their separate chains.",
+      "Tail and back are partially hidden in the front view; do not treat absent silhouette as absent anatomy."
+    ]
+  }
+}

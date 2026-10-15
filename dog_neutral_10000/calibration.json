@@ -1,0 +1,50 @@
+{
+  "front": {
+    "cell": [
+      0,
+      0
+    ],
+    "flip": false,
+    "meters_per_pixel": 0.002230347349177331,
+    "anchor_pixel": 266.5,
+    "ground_pixel": 573,
+    "height_m": 1.22,
+    "camera": "estimated orthographic; generated profile has mild perspective"
+  },
+  "left": {
+    "cell": [
+      1,
+      0
+    ],
+    "flip": false,
+    "meters_per_pixel": 0.002238532110091743,
+    "anchor_pixel": 461.8104918032787,
+    "ground_pixel": 573,
+    "height_m": 1.22,
+    "camera": "estimated orthographic; generated profile has mild perspective"
+  },
+  "back": {
+    "cell": [
+      0,
+      1
+    ],
+    "flip": true,
+    "meters_per_pixel": 0.002271880819366853,
+    "anchor_pixel": 194.5,
+    "ground_pixel": 552,
+    "height_m": 1.22,
+    "camera": "estimated orthographic; generated profile has mild perspective"
+  },
+  "right": {
+    "cell": [
+      1,
+      1
+    ],
+    "flip": true,
+    "meters_per_pixel": 0.002280373831775701,
+    "anchor_pixel": 457.2167213114754,
+    "ground_pixel": 551,
+    "height_m": 1.22,
+    "camera": "estimated orthographic; generated profile has mild perspective"
+  }
+}
