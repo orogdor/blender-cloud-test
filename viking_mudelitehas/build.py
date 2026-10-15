@@ -200,7 +200,18 @@ bpy.ops.object.select_all(action='DESELECT')
 for item in [ob,*gear]:item.select_set(True)
 bpy.context.view_layer.objects.active=ob
 bpy.ops.export_scene.gltf(filepath=str((OUT/"Viking_Mudelitehas_8000_Level2.glb").resolve()),export_format='GLB',use_selection=True,export_apply=True)
-bpy.ops.wm.obj_export(filepath=str((OUT/"Viking_Mudelitehas_8000_Level2.obj").resolve()),export_selected_objects=True)
+# Pure Python OBJ export preserves Blender body quads without loading the
+# headless OpenGL/EGL based OBJ export operator on CI runners.
+with (OUT/"Viking_Mudelitehas_8000_Level2.obj").open("w") as fp:
+ fp.write("# Mudelitehas 8000 Level 2 - true quad body, detachable gear\n")
+ offset=0
+ for item in [ob,*gear]:
+  fp.write("o "+item.name+"\n")
+  for v in item.data.vertices:
+   fp.write("v %.6f %.6f %.6f\n"%tuple(v.co))
+  for face in item.data.polygons:
+   fp.write("f "+" ".join(str(offset+i+1) for i in face.vertices)+"\n")
+  offset+=len(item.data.vertices)
 with (OUT/"Viking_Mudelitehas_8000_Level2.glb").open("rb") as fp:
  fp.read(12);ln,kind=struct.unpack("<II",fp.read(8));gltf=json.loads(fp.read(ln))
 triangles=sum(gltf["accessors"][p["indices"]]["count"]//3 for m in gltf["meshes"] for p in m["primitives"])
@@ -213,7 +224,7 @@ stats={"pipeline":"2D four views -> saved cloud -> Poisson mesh -> exact Blender
  "Axe, shield and fasteners are independent equipment meshes and not part of the 8000 body quads"]}
 (OUT/"validation.json").write_text(json.dumps(stats,indent=2))
 # Studio, render true model from 4 sides (not AI preview images).
-scene=bpy.context.scene;scene.render.engine='BLENDER_EEVEE'
+scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=12;scene.cycles.device='CPU'
 scene.render.resolution_x=700;scene.render.resolution_y=790;scene.render.resolution_percentage=100
 scene.world.color=(.15,.17,.2)
 def aim(o,pos):o.rotation_euler=(Vector(pos)-o.location).to_track_quat('-Z','Y').to_euler()
