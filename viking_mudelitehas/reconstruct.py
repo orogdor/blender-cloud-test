@@ -51,9 +51,12 @@ def make_view(kind):
               (.17,1.79),(.17,1.69)],iron)
     else:
         # Profile uses real sagittal silhouette, not a copy of the frontal silhouette.
-        poly([(-.17,.81),(.13,.81),(.20,.53),(.185,.30),(.15,.065),
-              (-.34,.025),(-.35,.005),(.19,.005),(.27,.07),
-              (.23,.81)],boots)
+        # Continuous side-view upper/lower leg silhouette; old crossed
+        # polygon collapsed to a narrow strip and lost both legs in the hull.
+        poly([(-.19,.83),(.22,.83),(.22,.65),(.21,.44),(.19,.27),
+              (.18,.10),(-.19,.10),(-.18,.32),(-.20,.56)],cloth)
+        poly([(-.20,.37),(.19,.37),(.22,.12),(.23,.062),(.14,.012),
+              (-.34,.012),(-.35,.05),(-.25,.09)],boots)
         poly([(-.19,1.51),(.27,1.52),(.36,1.29),(.30,1.06),
               (.32,.81),(.20,.71),(-.23,.72),(-.30,1.15)],cloth)
         poly([(-.30,1.48),(-.22,1.58),(.27,1.56),(.43,1.45),
