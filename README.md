@@ -1,3 +1,11 @@
+# Mudelitehas Beta
+
+[Pluginapakett ja juhend](plugins/mudelitehas/README.md) · [Beeta allalaadimine](https://github.com/orogdor/blender-cloud-test/releases/tag/v0.1.1-beta.1)
+
+Viimase jalutava mängukaru põhjal jagatav Blenderi töövoog. Ametlik pluginavorming ja repo kataloog on lisatud; avaliku OpenAI kataloogi avaldamine on veel ootel.
+
+---
+
 # Blender Cloud + Three.js
 
 This repository runs Blender inside GitHub Actions, generates an armored soldier as GLB and BLEND, renders previews, and publishes a mobile Three.js viewer using GitHub Pages.

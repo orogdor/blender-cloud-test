@@ -1,3 +1,15 @@
+# Mudelitehas Beta · pluginapakett 0.1.1-beta.1
+
+**[Laadi alla ametliku vorminguga pluginapakett](https://github.com/orogdor/blender-cloud-test/releases/download/v0.1.1-beta.1/Mudelitehas-0.1.1-beta.1-plugin.zip)** · **[Paigaldus ja kataloogi esitamine](SUBMISSION.md)**
+
+Kaasas on standardne `plugin.json`, heleda/tumeda teema ikoonid, tegeliku karu eelvaade ning olemasolev kontrollitud oskus. Repo pluginakataloog asub `.agents/plugins/marketplace.json`; allika saab toetatud töölauakliendis lisada käsuga `codex plugin marketplace add orogdor/blender-cloud-test --ref v0.1.1-beta.1`.
+
+See on avaldamiseks ette valmistatud oskustega beetaplugin. Avalikku OpenAI kataloogi üleslaadimine, konto kinnitamine ja heakskiit on veel tegemata. Mootor ning viimase karu näidis on versioonist 0.1.0 muutmata. Vajalik on Blenderi ja Pythoni käivitamist võimaldav keskkond; paigaldamine ei lisa telefonile Blenderit.
+
+[Andmekäitlus](PRIVACY.md) · [Tagasiside](https://github.com/orogdor/blender-cloud-test/issues/new?template=mudelitehas-feedback.yml)
+
+---
+
 # Mudelitehas 0.1 — jalutav mängukaru
 
 Jagatav **oskus + Blenderi töötluspakett**. Näidiseks on viimane Mudelitehasega loodud jalutav mängukaru, mitte koer. See on testversioon ühe kontrollitud karuretseptiga; avalikku pluginakataloogi lisamist ega kõigi olendite automaatset tuge see ei tähenda.

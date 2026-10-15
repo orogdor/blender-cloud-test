@@ -4,11 +4,13 @@ on:
     branches: [main]
     paths:
       - 'plugins/mudelitehas/**'
+      - '.agents/plugins/marketplace.json'
       - 'tests/mudelitehas_v01/**'
       - '.github/workflows/mudelitehas-v01.yml'
   pull_request:
     paths:
       - 'plugins/mudelitehas/**'
+      - '.agents/plugins/marketplace.json'
       - 'tests/mudelitehas_v01/**'
       - '.github/workflows/mudelitehas-v01.yml'
   workflow_dispatch:
@@ -32,6 +34,7 @@ jobs:
         run: |
           python -m unittest discover -s tests/mudelitehas_v01 -v
           python -m compileall -q plugins/mudelitehas/skills/mudelitehas
+          python plugins/mudelitehas/tools/package_plugin.py --output "$RUNNER_TEMP/plugin-package-check"
       - uses: actions/cache@v4
         with:
           path: ~/.cache/mudelitehas-runtime
@@ -73,17 +76,22 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      - name: Build root-manifest submission ZIP
+        run: python plugins/mudelitehas/tools/package_plugin.py --output dist
       - name: Package shareable skill and original teddy example
         run: |
           python - <<'PY'
           import pathlib,shutil,json,hashlib
-          pkg=pathlib.Path('plugins/mudelitehas');version=(pkg/'VERSION').read_text().strip();dist=pathlib.Path('dist');dist.mkdir()
+          pkg=pathlib.Path('plugins/mudelitehas');version=(pkg/'VERSION').read_text().strip();dist=pathlib.Path('dist');dist.mkdir(exist_ok=True)
           canonical=pkg/'examples/teddy-walk';m=json.loads((canonical/'canonical-manifest.json').read_text())
           for name,entry in m['files'].items():assert hashlib.sha256((canonical/name).read_bytes()).hexdigest()==entry['sha256']
           shutil.make_archive(str(dist/f'Mudelitehas-{version}'),'zip',root_dir='plugins',base_dir='mudelitehas')
           shutil.make_archive(str(dist/f'Mudelitehas-{version}-skill'),'zip',root_dir=pkg/'skills',base_dir='mudelitehas')
           for name in ['Jalutav_Mangukaru_10000.glb','Jalutav_Mangukaru_LOD.glb','Jalutav_Mangukaru_10000.blend','Jalutav_Mangukaru_Uus.gif','canonical-manifest.json']:shutil.copy2(canonical/name,dist/name)
           notes=f'''Mudelitehas {version} testversioon. Jagatav oskus ja Blender 4.5.3 töötluspakett.
+          Avaldamiseks ette valmistatud portable plugin: laadi portaali üles ainult -plugin.zip fail.
+          Sisaldab ametlikku manifesti, ikoone, karu eelvaadet ja repo pluginakataloogi.
+          OpenAI kataloogi üleslaadimine ning heakskiit on veel tegemata; mootor jääb 0.1.0 versiooni.
           Näidis on viimane jalutav mängukaru: põhikeha 10 000 nelinurka, 23 luud ja Walk_Loop.
           Mudelifailid on algse üle antud mudeli täpsed koopiad; canonical-manifest.json sisaldab räsisid.
           CI ehitab retsepti eraldi uuesti ja kontrollib eksporditud GLB animatsiooni.

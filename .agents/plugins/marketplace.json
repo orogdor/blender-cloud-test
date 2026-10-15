@@ -1,0 +1,12 @@
+{
+  "name": "mudelitehas-beta",
+  "interface": {"displayName": "Mudelitehas Beta"},
+  "plugins": [
+    {
+      "name": "mudelitehas",
+      "source": {"source": "local", "path": "./plugins/mudelitehas"},
+      "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+      "category": "Developer Tools"
+    }
+  ]
+}

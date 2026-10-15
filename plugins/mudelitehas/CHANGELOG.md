@@ -1,3 +1,11 @@
+## 0.1.1-beta.1
+
+- Ametlik portable `plugin.json` ja OpenAI kataloogi metaandmed.
+- GitHubi pluginakataloog toetatud kohalikele klientidele.
+- Ikoonid, muutmata viimase karu renderdus ja eestikeelne kirjeldus.
+- Eraldi juurmanifestiga `-plugin.zip`, kohalik paketikontroll ning esitamisjuhend.
+- Töötlusmootor ja algsed 0.1.0 mudelifailid on muutmata; OpenAI avaldamine on ootel.
+
 # Versioonid
 
 ## 0.1.0 — testversioon
