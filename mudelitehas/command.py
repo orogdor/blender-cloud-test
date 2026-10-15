@@ -24,6 +24,8 @@ def parse_command(command):
     pipeline=profiles['living_pipeline'] if pose['subject_kind']=='living' else profiles['shared_pipeline']
     return {
         "schema_version": 2,
+        "workflow_version": profiles["workflow_version"],
+        "point_placement_policy": profiles["point_placement_policy"],
         "command": f"Mudelitehas {faces} {level} {description}",
         "quad_faces": faces,
         "level": level,

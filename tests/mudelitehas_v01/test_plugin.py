@@ -13,9 +13,9 @@ class PluginTests(unittest.TestCase):
    with zipfile.ZipFile(path) as z:
     names=z.namelist();self.assertIn('plugin.json',names);self.assertIn('skills/mudelitehas/SKILL.md',names);self.assertIn('assets/walking-teddy.png',names)
     self.assertFalse(any('..' in Path(n).parts or n.startswith('/') or '__pycache__' in n or n.endswith(('.pyc','.blend','.glb')) for n in names));self.assertFalse(any(n.startswith('examples/') for n in names))
-    self.assertEqual(json.loads(z.read('plugin.json'))['version'],'0.1.1-beta.1')
- def test_engine_and_canonical_model_versions_remain_original(self):
-  self.assertEqual((PKG/'skills/mudelitehas/VERSION').read_text().strip(),'0.1.0')
+    self.assertEqual(json.loads(z.read('plugin.json'))['version'],'0.1.2')
+ def test_engine_updated_and_historical_canonical_model_remains_original(self):
+  self.assertEqual((PKG/'skills/mudelitehas/VERSION').read_text().strip(),'0.1.2')
   self.assertEqual(json.loads((PKG/'examples/teddy-walk/canonical-manifest.json').read_text())['version'],'0.1.0')
 
 if __name__=='__main__':unittest.main()

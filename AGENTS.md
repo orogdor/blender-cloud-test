@@ -1,3 +1,9 @@
+# Mudelitehas 0.1.2 — new-model default
+
+For EVERY new model, place/check every pre-mesh point in at least three views and three independent viewing directions (prefer front/side/top). Front plus rear is one axis. Save point witnesses and residuals; report unresolved and inferred points instead of fabricating feature matches. Apply the same rule to neutral-pose living subjects. Use the packaged `plugins/mudelitehas/skills/mudelitehas/references/three-view-policy.md` and `scripts/check_multiview.py`.
+
+The reviewed 5000-total-quad sedan implements the policy. Legacy two-axis reconstruction recipes are historical reproduction only and must not silently create new 0.1.2 models. Updating instructions does not repair old assets.
+
 # Mudelitehas instructions
 
 For every new Mudelitehas model request, read `mudelitehas/README.md`,

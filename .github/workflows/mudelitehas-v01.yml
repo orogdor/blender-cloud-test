@@ -33,6 +33,7 @@ jobs:
       - name: Test package and exact original teddy checksums
         run: |
           python -m unittest discover -s tests/mudelitehas_v01 -v
+          python -m unittest mudelitehas.test_pose_workflow -v
           python -m compileall -q plugins/mudelitehas/skills/mudelitehas
           python plugins/mudelitehas/tools/package_plugin.py --output "$RUNNER_TEMP/plugin-package-check"
       - uses: actions/cache@v4
@@ -57,6 +58,18 @@ jobs:
           for name in ['reconstruction','pose_gate','finish','GLB_reimport']:assert steps[name].get('cached'),steps
           print('Cache reuse passed')
           PY
+      - name: Rebuild 0.1.2 car and verify three-direction point gate
+        run: |
+          python plugins/mudelitehas/skills/mudelitehas/scripts/run_car.py --workdir "$RUNNER_TEMP/car-012-clean" --blender "$BLENDER"
+          python - <<'PY'
+          import os,json,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'car-012-clean/output'
+          gate=json.loads((root/'three_direction_gate.json').read_text())
+          assert gate['point_count']==83747 and gate['unresolved_points']==17399,gate
+          assert gate['independent_direction_rank']==3 and not gate['feature_triangulation_proven'],gate
+          assert json.loads((root/'validation.json').read_text())['quad_faces_total']==5000
+          assert json.loads((root/'export_reimport_validation.json').read_text())['status']=='passed'
+          PY
       - name: Attach rebuilt test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -66,6 +79,8 @@ jobs:
             ${{ runner.temp }}/mudelitehas-clean/output/*validation.json
             ${{ runner.temp }}/mudelitehas-clean/output/run_manifest.json
             ${{ runner.temp }}/mudelitehas-clean/logs/
+            ${{ runner.temp }}/car-012-clean/output/*.json
+            ${{ runner.temp }}/car-012-clean/logs/
           if-no-files-found: warn
           retention-days: 30
   release:
@@ -88,7 +103,13 @@ jobs:
           shutil.make_archive(str(dist/f'Mudelitehas-{version}'),'zip',root_dir='plugins',base_dir='mudelitehas')
           shutil.make_archive(str(dist/f'Mudelitehas-{version}-skill'),'zip',root_dir=pkg/'skills',base_dir='mudelitehas')
           for name in ['Jalutav_Mangukaru_10000.glb','Jalutav_Mangukaru_LOD.glb','Jalutav_Mangukaru_10000.blend','Jalutav_Mangukaru_Uus.gif','canonical-manifest.json']:shutil.copy2(canonical/name,dist/name)
+          car=pkg/'examples/car-5000'
+          for name in ['Auto_5000_3vaate_test.glb','Auto_5000_3vaate_test.blend','Auto_5000_eelvaade.png','three_view_test.json']:shutil.copy2(car/name,dist/name)
+          shutil.copy2(car/'canonical-manifest.json',dist/'car-canonical-manifest.json')
           notes=f'''Mudelitehas {version} testversioon. Jagatav oskus ja Blender 4.5.3 töötluspakett.
+          0.1.2: iga uue mudeli punkti paigutus kontrollitakse vähemalt kolmes vaates ja kolmes sõltumatus suunas enne meshi.
+          Kaasas 5000 kogu-mudeli nelinurgaga auto retsept. 83 747 punkti, 79.22% kolme suuna siluetitoetust; vastuolud säilivad.
+          Vana karu allpool on ajalooline kahe-suuna kordusnäidis ega vasta uue mudeli 0.1.2 reeglile.
           Avaldamiseks ette valmistatud portable plugin: laadi portaali üles ainult -plugin.zip fail.
           Sisaldab ametlikku manifesti, ikoone, karu eelvaadet ja repo pluginakataloogi.
           OpenAI kataloogi üleslaadimine ning heakskiit on veel tegemata; mootor jääb 0.1.0 versiooni.
@@ -110,5 +131,5 @@ jobs:
           if gh release view "$tag" >/dev/null 2>&1; then
             echo "Release $tag already exists; preserved without replacing assets."
           else
-            gh release create "$tag" dist/*.zip dist/*.glb dist/*.blend dist/*.gif dist/canonical-manifest.json --target "$GITHUB_SHA" --title "Mudelitehas $version - jalutav mängukaru" --notes-file dist/release-notes.md --prerelease
+            gh release create "$tag" dist/*.zip dist/*.glb dist/*.blend dist/*.gif dist/*.png dist/*manifest.json dist/three_view_test.json --target "$GITHUB_SHA" --title "Mudelitehas $version - kolme suuna punktipaigutus" --notes-file dist/release-notes.md --prerelease
           fi

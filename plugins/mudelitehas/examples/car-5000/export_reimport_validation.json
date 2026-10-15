@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "actual_export_triangles": 10000,
+  "expected_triangles": 10000,
+  "zero_area_export_faces": 0,
+  "mesh_objects": 16,
+  "maximum_distance_to_pre_mesh_cloud_m": 0.0,
+  "mean_distance_to_pre_mesh_cloud_m": 0.0,
+  "all_vertices_match_saved_pre_mesh_cloud": true,
+  "texture_images": 2
+}

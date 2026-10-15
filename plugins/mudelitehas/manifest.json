@@ -1,14 +1,14 @@
 {
   "format": "mudelitehas-skill-bundle/v1",
   "name": "Mudelitehas",
-  "version": "0.1.1-beta.1",
+  "version": "0.1.2",
   "status": "test-release",
   "skill": "skills/mudelitehas",
   "runtime": "Blender 4.5.3",
-  "baseline": "examples/teddy-walk/canonical-manifest.json",
+  "baseline": "examples/car-5000/canonical-manifest.json",
   "feedback": "https://github.com/orogdor/blender-cloud-test/issues/new?template=mudelitehas-feedback.yml",
   "hosted_service": false,
-  "scope": "Validated 10000-quad walking teddy example; no automatic arbitrary character generation",
-  "engine_version": "0.1.0",
+  "scope": "Three-direction per-point policy for new models; reviewed sedan recipe and historical teddy regression.",
+  "engine_version": "0.1.2",
   "portable_manifest": "plugin.json"
 }

@@ -1,6 +1,10 @@
+# 0.1.2 scope
+
+Every new model requires the three-direction per-point policy. The reviewed 5000-total-quad sedan implements it; historical teddy reproduction remains available for regression only and spans two directions. These are two object-specific recipes, not a general generator.
+
 # Scope and limits
 
-This is a shareable skill plus a Blender recipe, not an autonomous hosted 3D service or a public plugin-directory listing. It runs one tested biped plush-teddy example. New anatomy, arbitrary meshes, other quad budgets and user-defined prompts need separate development and validation.
+This is a shareable skill plus a Blender recipe, not an autonomous hosted 3D service or a public plugin-directory listing. It retains the historical biped plush-teddy example. New anatomy, arbitrary meshes, other quad budgets and user-defined prompts need separate development and validation.
 
 The four views were AI-generated and visually reviewed. Mild view inconsistencies, estimated depth and inferred joint positions remain. The result is a stylized reconstruction, not a scan or an exact copy of the photograph. Smooth shading and increased face count do not replace rounded geometry or correct anatomy.
 

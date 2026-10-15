@@ -1,0 +1,44 @@
+{
+  "test": "Mudelitehas 5000 - three-axis per-point support experiment",
+  "status": "cloud_then_quad_mesh_created",
+  "cloud_points": 83747,
+  "points_checked_in_all_four_views": 83747,
+  "points_supported_in_3_axes": 66348,
+  "points_supported_in_all_4_silhouettes": 60069,
+  "minimum_searched_directions": 3,
+  "points_with_unresolved_projection_conflicts": 17399,
+  "support_tolerance_px": 3,
+  "support_counts": {
+    "top": 71177,
+    "side": 82642,
+    "front": 76214,
+    "rear": 75092
+  },
+  "minimum_silhouette_distance_px": [
+    -30.971464307348867,
+    -11.247408565522171,
+    -26.961964197897966,
+    -36.06482680096993
+  ],
+  "per_point_visible_feature_match_claim": false,
+  "unique_three_view_triangulation_claim": false,
+  "assumptions": [
+    "affine orthographic registration and left/right symmetry",
+    "manually traced silhouette/roof profiles",
+    "rounded body section, wheel and mirror depth priors",
+    "occluded surfaces only constrained by projections; not observed in three photographs",
+    "materials use source image projections and include original lighting",
+    "remaining projection conflicts are reported instead of crushing geometry onto masks"
+  ],
+  "cloud_sha256": "ceb041cfb3df6c8683cf6f4c5ff0eaabc5749a72f2195aefa286d92707773a97",
+  "mesh_quads_total": 5000,
+  "body_quads_including_caps": 3400,
+  "all_mesh_vertices_from_saved_cloud": true,
+  "mesh_projection_silhouette_IoU": {
+    "top": 0.9464009230968486,
+    "side": 0.938422539674157,
+    "front": 0.8817920522850873,
+    "rear": 0.8921097411708511
+  },
+  "supported_three_axes_percent": 79.22
+}

@@ -8,6 +8,8 @@ def main():
     argv=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--request',type=Path,required=True);ap.add_argument('--output',type=Path,default=Path('output/mudelitehas_level1'));args=ap.parse_args(argv)
     request=json.loads(args.request.read_text());out=args.output;out.mkdir(parents=True,exist_ok=True)
+    if request.get('point_placement_policy',{}).get('required_for_all_new_models'):
+        raise ValueError('This historical level-1 recipe has only two view directions. New 0.1.2 models require a matching three-direction point-cloud recipe.')
     if request['level']!=1:ap.error('See Blenderi retsept on taseme 1 jaoks.')
     if request['animation_requested']:ap.error('Taseme 1 põhiretsept loob staatilise meshi. Animatsiooniga mudelile koosta eraldi lihtne luustik või kasuta taset 2/3.')
     if request.get('pose_plan',{}).get('requires_rig'):ap.error('Tellitud poos vajab luustikuga poseerimist ehituspoosist; staatiline põhiretsept seda ei asenda.')

@@ -1,3 +1,11 @@
+## 0.1.2
+
+- Kõigile uutele mudelitele kohustuslik iga punktipilve punkti kontroll vähemalt kolmes vaates ja kolmes sõltumatus suunas.
+- Korduskasutatav tunnistajate/projektsioonide kontrollija: puuduvad vaated, väljamõeldud pildikoordinaadid ja paisutatud toetuslipud lükatakse tagasi.
+- Läbitestitud 5000 kogu-mudeli nelinurgaga auto retsept, mille punktikontroll käib enne meshi.
+- Vastuolud, varjatud punktid ja sügavushinnangud jäävad aruandesse; siluetitoetus ei ole fotogrammeetriline tõend.
+- Karu retsept säilib kahe-suuna ajaloolise regressioonina. Vanu binaarfaile pole ümber kirjutatud.
+
 ## 0.1.1-beta.1
 
 - Ametlik portable `plugin.json` ja OpenAI kataloogi metaandmed.

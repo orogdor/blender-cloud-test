@@ -1,23 +1,7 @@
-# Mudelitehas Beta
+# Mudelitehas 0.1.2
 
-[Pluginapakett ja juhend](plugins/mudelitehas/README.md) · [Beeta allalaadimine](https://github.com/orogdor/blender-cloud-test/releases/tag/v0.1.1-beta.1)
+[Uus kolme suuna meetod ja juhend](plugins/mudelitehas/README.md) · [Allalaadimine](https://github.com/orogdor/blender-cloud-test/releases/tag/v0.1.2)
 
-Viimase jalutava mängukaru põhjal jagatav Blenderi töövoog. Ametlik pluginavorming ja repo kataloog on lisatud; avaliku OpenAI kataloogi avaldamine on veel ootel.
+Iga uue mudeli punktipilve punkti kontrollitakse enne meshi vähemalt kolmes vaates ja kolmes sõltumatus suunas. Kaasas 5000 nelinurgaga auto kontrollretsept, aus kõrvalekallete aruanne ning ajalooline karu kordusretsept.
 
----
-
-# Blender Cloud + Three.js
-
-This repository runs Blender inside GitHub Actions, generates an armored soldier as GLB and BLEND, renders previews, and publishes a mobile Three.js viewer using GitHub Pages.
-
-## Steps
-1. GitHub repository Settings → Pages → Build and deployment → Source: GitHub Actions.
-2. Actions → Blender soldier and Three.js → Run workflow (or push to main).
-3. See the 3D viewer at https://orogdor.github.io/blender-cloud-test/ after successful deployment.
-4. Download source `.blend`, `.glb`, and PNG previews from the workflow artifact `soldier-build-output`.
-
-This is a procedural prototype, without realistic anatomy or animation. The full Blender script is in `scripts/create_soldier.py`.
-
-## Mudelitehas 0.1 — jagatav töövoog
-
-[**Ava Mudelitehas 0.1**](plugins/mudelitehas/README.md): jagatav oskus ja Blenderi mootor, mille põhikatsena kasutatakse viimast jalutavat mängukaru. Kaasas on valmis GLB/BLEND, etappide taaskasutus, kontrolliaruanded ja tagasiside vorm. Varasemad katsed jäävad selles repositooriumis ajalooks alles.
+[Repo pluginakataloog](.agents/plugins/marketplace.json). Avaliku OpenAI kataloogi kinnitamine on veel ootel.

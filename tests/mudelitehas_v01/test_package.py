@@ -10,7 +10,7 @@ class PackageTests(unittest.TestCase):
   for name,item in manifest['files'].items():
    p=root/name;self.assertEqual(p.stat().st_size,item['bytes'],name);self.assertEqual(hashlib.sha256(p.read_bytes()).hexdigest(),item['sha256'],name)
  def test_references_and_scope(self):
-  run=module('run');run.reference_integrity();self.assertEqual((SKILL/'VERSION').read_text().strip(),'0.1.0');request=json.loads((run.ASSET/'request.json').read_text());self.assertEqual(request['quad_faces'],10000);self.assertEqual(request['rest_pose'],'biped T-pose')
+  run=module('run');run.reference_integrity();self.assertEqual((SKILL/'VERSION').read_text().strip(),'0.1.2');request=json.loads((run.ASSET/'request.json').read_text());self.assertEqual(request['quad_faces'],10000);self.assertEqual(request['rest_pose'],'biped T-pose')
  def test_wrong_subject_is_rejected_before_writing(self):
   with tempfile.TemporaryDirectory() as d:
    work=Path(d)/'run';p=subprocess.run([sys.executable,str(SKILL/'scripts/run.py'),'--workdir',str(work),'--command','Mudelitehas 10000 3 sitsiv koer animatsiooniga'],capture_output=True,text=True);self.assertEqual(p.returncode,2);self.assertFalse(work.exists());self.assertIn('supports only',p.stderr)

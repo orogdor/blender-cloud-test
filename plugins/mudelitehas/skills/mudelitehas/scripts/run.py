@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Portable, resumable runner for the validated Mudelitehas 0.1 teddy recipe."""
+"""Historical teddy regression runner; two-direction references do not meet the new 0.1.2 rule."""
 import argparse,ast,hashlib,json,os,platform,shutil,subprocess,sys,time,uuid
 from pathlib import Path
 SKILL=Path(__file__).resolve().parents[1];ASSET=SKILL/'assets/teddy-walk';VERSION=(SKILL/'VERSION').read_text().strip()
@@ -35,7 +35,7 @@ def main(argv=None):
  else:marker.write_text(json.dumps({'recipe':'teddy-walk','created_with':VERSION}))
  for folder in ['recipe','references']:shutil.copytree(ASSET/folder,work/folder,dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__','*.pyc'))
  out=work/'output';cache=work/'cache';logs=work/'logs';out.mkdir(exist_ok=True);cache.mkdir(exist_ok=True);logs.mkdir(exist_ok=True);statepath=cache/'runner_state.json';old=json.loads(statepath.read_text()) if statepath.exists() else {};keys=fingerprints();run_id=uuid.uuid4().hex[:12];events=[];env=os.environ.copy();env['MUDELITEHAS_PREVIEW']=args.preview;start=time.perf_counter()
- manifest={'plugin_version':VERSION,'run_id':run_id,'recipe':'teddy-walk','command':request['command'],'quad_budget':10000,'budget_scope':'primary_body','reference_hashes':json.loads((ASSET/'reference-checksums.json').read_text()),'fingerprints':keys,'python_version':platform.python_version(),'mode':args.mode,'preview':args.preview,'status':'running','stages':events}
+ manifest={'plugin_version':VERSION,'run_id':run_id,'recipe':'teddy-walk','policy_scope':'historical_reproduction_only','three_direction_compliant':False,'command':request['command'],'quad_budget':10000,'budget_scope':'primary_body','reference_hashes':json.loads((ASSET/'reference-checksums.json').read_text()),'fingerprints':keys,'python_version':platform.python_version(),'mode':args.mode,'preview':args.preview,'status':'running','stages':events}
  def save():manifest['seconds']=time.perf_counter()-start;(out/'run_manifest.json').write_text(json.dumps(manifest,indent=2))
  def stage(name,cmd):
   print('Running '+name,flush=True);t=time.perf_counter()

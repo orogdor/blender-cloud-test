@@ -31,7 +31,8 @@
         "point cloud",
         "validation"
       ],
-      "living_pose_policy": "pose_policy"
+      "living_pose_policy": "pose_policy",
+      "point_placement_policy": "point_placement_policy"
     },
     "2": {
       "name": "Tavaline",
@@ -50,7 +51,8 @@
         "validation"
       ],
       "living_pose_policy": "pose_policy",
-      "example_recipe_status": "legacy_posed_reference_example; not a neutral-pose template"
+      "example_recipe_status": "legacy_posed_reference_example; not a neutral-pose template",
+      "point_placement_policy": "point_placement_policy"
     },
     "3": {
       "name": "Täiustatud",
@@ -71,7 +73,8 @@
         "validation"
       ],
       "living_pose_policy": "pose_policy",
-      "example_recipe_status": "legacy_posed_reference_example; not a neutral-pose template"
+      "example_recipe_status": "legacy_posed_reference_example; not a neutral-pose template",
+      "point_placement_policy": "point_placement_policy"
     }
   },
   "living_pipeline": [
@@ -95,5 +98,21 @@
     "rig_required_when_target_pose_or_animation_is_requested": true,
     "quality_levels_do_not_skip_rest_pose_policy": true,
     "rig_required_for_new_living_subjects": true
+  },
+  "workflow_version": "0.1.2",
+  "point_placement_policy": {
+    "required_for_all_new_models": true,
+    "minimum_views_per_point": 3,
+    "minimum_independent_directions": 3,
+    "preferred_views": [
+      "front",
+      "side",
+      "top"
+    ],
+    "save_per_point_witnesses": true,
+    "save_cloud_before_mesh": true,
+    "report_unresolved_points": true,
+    "silhouette_support_is_not_feature_triangulation": true,
+    "legacy_two_direction_recipe_requires_explicit_reproduction": true
   }
 }

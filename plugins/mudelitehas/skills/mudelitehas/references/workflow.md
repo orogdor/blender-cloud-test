@@ -1,3 +1,5 @@
+New-model workflow version: 0.1.2. Apply three-view-policy.md first. This document describes historical teddy reproduction, not a new-model default.
+
 # Validated workflow
 
 - Version: 0.1.0, test release.

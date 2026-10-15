@@ -1,0 +1,39 @@
+{
+  "version": "0.1.2",
+  "model_origin": "Exact previously reviewed 5000-quad three-view experiment; retained without rebuilding canonical binaries",
+  "source_workflow": "reviewed car experiment before generalisation into 0.1.2",
+  "files": {
+    "three_view_test.json": {
+      "bytes": 1601,
+      "sha256": "2a00f7557e0cfca304e2e1c88eade21c23047decc97cfba2bf11a98004fcf908"
+    },
+    "Auto_5000_3vaate_test.blend": {
+      "bytes": 1533711,
+      "sha256": "21863ce615a86ddf3db9e310a5d0fc20180d3ccd7dd9217d023efb11a9a32a9c"
+    },
+    "validation.json": {
+      "bytes": 4562,
+      "sha256": "839e59769a325ce326e7841f3ac8aeed2acd2ba5cd76d3580c06cda8392bc261"
+    },
+    "Auto_5000_eelvaade.png": {
+      "bytes": 798195,
+      "sha256": "dea5189265abac1742b4bf5fe911f2d615151f95d669a9f345382dad21b0d8eb"
+    },
+    "export_reimport_validation.json": {
+      "bytes": 309,
+      "sha256": "053ec8a118b9132de7ddcca44ac66fab32078f82031d87d5a2dc9c08885eb870"
+    },
+    "04_point_cloud.npz": {
+      "bytes": 2839152,
+      "sha256": "ceb041cfb3df6c8683cf6f4c5ff0eaabc5749a72f2195aefa286d92707773a97"
+    },
+    "Auto_5000_3vaate_test.glb": {
+      "bytes": 1461248,
+      "sha256": "b542dcb2437c6ffc2187bbe2e8bb6bee7236811da194844a45891cfec842d67f"
+    },
+    "calibration.json": {
+      "bytes": 6796,
+      "sha256": "f867b3a5e7e98e31085fe910aebd82e52c35f37854ed0ee40220fe588d9bd487"
+    }
+  }
+}

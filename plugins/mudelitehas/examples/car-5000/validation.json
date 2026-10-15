@@ -1,0 +1,193 @@
+{
+  "test": "Mudelitehas kolm suunda / 5000 nelinurka",
+  "quad_faces_total": 5000,
+  "triangles_export_expected": 10000,
+  "objects": [
+    {
+      "name": "wheel_0_-1",
+      "vertices": 360,
+      "quads": 360,
+      "faces": 360,
+      "triangles": 720,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.07287395015542389
+    },
+    {
+      "name": "wheel_0_1",
+      "vertices": 360,
+      "quads": 360,
+      "faces": 360,
+      "triangles": 720,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.07280131324932138
+    },
+    {
+      "name": "wheel_1_-1",
+      "vertices": 360,
+      "quads": 360,
+      "faces": 360,
+      "triangles": 720,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.07385568652290522
+    },
+    {
+      "name": "wheel_1_1",
+      "vertices": 360,
+      "quads": 360,
+      "faces": 360,
+      "triangles": 720,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.07357991965827623
+    },
+    {
+      "name": "mirror_-1",
+      "vertices": 26,
+      "quads": 24,
+      "faces": 24,
+      "triangles": 48,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.005366676961196676
+    },
+    {
+      "name": "mirror_1",
+      "vertices": 26,
+      "quads": 24,
+      "faces": 24,
+      "triangles": 48,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.005515244757182795
+    },
+    {
+      "name": "handle_-0.08_-1",
+      "vertices": 12,
+      "quads": 12,
+      "faces": 12,
+      "triangles": 24,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 1.6879516150411446e-05
+    },
+    {
+      "name": "handle_-0.08_1",
+      "vertices": 12,
+      "quads": 12,
+      "faces": 12,
+      "triangles": 24,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 1.708147219413894e-05
+    },
+    {
+      "name": "handle_0.91_-1",
+      "vertices": 12,
+      "quads": 12,
+      "faces": 12,
+      "triangles": 24,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 1.7286150808313303e-05
+    },
+    {
+      "name": "handle_0.91_1",
+      "vertices": 12,
+      "quads": 12,
+      "faces": 12,
+      "triangles": 24,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 1.7081473647594678e-05
+    },
+    {
+      "name": "front_plate",
+      "vertices": 15,
+      "quads": 8,
+      "faces": 8,
+      "triangles": 16,
+      "boundary_edges": 12,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.055270157165196517
+    },
+    {
+      "name": "rear_plate",
+      "vertices": 15,
+      "quads": 8,
+      "faces": 8,
+      "triangles": 16,
+      "boundary_edges": 12,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.0659691953973529
+    },
+    {
+      "name": "grille",
+      "vertices": 45,
+      "quads": 32,
+      "faces": 32,
+      "triangles": 64,
+      "boundary_edges": 24,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.1686880513736322
+    },
+    {
+      "name": "fog_-1",
+      "vertices": 15,
+      "quads": 8,
+      "faces": 8,
+      "triangles": 16,
+      "boundary_edges": 12,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.01183469831631462
+    },
+    {
+      "name": "fog_1",
+      "vertices": 15,
+      "quads": 8,
+      "faces": 8,
+      "triangles": 16,
+      "boundary_edges": 12,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 0.011847342324339516
+    },
+    {
+      "name": "Auto_kere_3400_quads",
+      "vertices": 3402,
+      "quads": 3400,
+      "faces": 3400,
+      "triangles": 6800,
+      "boundary_edges": 0,
+      "nonmanifold_nonboundary_edges": 0,
+      "volume": 6.814850938153116
+    }
+  ],
+  "bounds_min_m": [
+    -2.286545753479004,
+    -1.0617729425430298,
+    0.0
+  ],
+  "bounds_max_m": [
+    2.284741163253784,
+    1.0635483264923096,
+    1.4683961868286133
+  ],
+  "dimensions_m": [
+    4.571286916732788,
+    2.1253212690353394,
+    1.4683961868286133
+  ],
+  "quad_count_includes_all_details": true,
+  "point_cloud_before_mesh": true,
+  "source_image_texture": true,
+  "geometry_animation": false,
+  "limits": [
+    "depth is inferred from silhouettes and reviewed profiles",
+    "same side reference mirrored for opposite side",
+    "texture contains baked source lighting",
+    "small decorative patches intentionally have boundary edges",
+    "not a manufactured dimension-accurate CAD model"
+  ]
+}

@@ -26,11 +26,11 @@ def validate():
     assert not any(k in extension for k in ['apps','hooks'])
     assert not (PKG / 'mcp.json').exists()
     assert (PKG / 'skills/mudelitehas/SKILL.md').is_file()
-    original = PKG / 'examples/teddy-walk'
-    assert (PKG / i['screenshots'][0]).read_bytes() == (original / 'Jalutav_Mangukaru_Uus.png').read_bytes()
-    manifest = json.loads((original / 'canonical-manifest.json').read_text())
-    for name, data in manifest['files'].items():
-        assert hashlib.sha256((original/name).read_bytes()).hexdigest() == data['sha256'], name
+    assert (PKG/'assets/car-5000.png').read_bytes() == (PKG/'examples/car-5000/Auto_5000_eelvaade.png').read_bytes()
+    assert (PKG/'assets/walking-teddy.png').read_bytes() == (PKG/'examples/teddy-walk/Jalutav_Mangukaru_Uus.png').read_bytes()
+    for folder in ['car-5000','teddy-walk']:
+        original=PKG/'examples'/folder;manifest=json.loads((original/'canonical-manifest.json').read_text())
+        for name,data in manifest['files'].items():assert hashlib.sha256((original/name).read_bytes()).hexdigest()==data['sha256'],name
     return m
 
 def build(destination):

@@ -19,6 +19,8 @@ def main():
     ap.add_argument('--cloud-only',action='store_true')
     ap.add_argument('--reference-manifest',default=None,help='Visuaalselt üle vaadatud ehituspoosi manifest JSON')
     args=ap.parse_args();request=json.loads(args.request.read_text())
+    if request.get('point_placement_policy',{}).get('required_for_all_new_models'):
+        raise ValueError('This historical level-1 recipe has only two view directions. New 0.1.2 models require a matching three-direction point-cloud recipe.')
     if request['level']!=1:ap.error('See rekonstruktsioon on taseme 1 jaoks.')
     manifest=json.loads(Path(args.reference_manifest).read_text()) if args.reference_manifest else {}
     review=validate_reference_manifest(request,manifest,args.input)
