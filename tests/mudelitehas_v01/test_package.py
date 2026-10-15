@@ -1,4 +1,5 @@
-import importlib.util,json,subprocess,sys,tempfile,unittest,zipfile,urllib.parse,hashlib
+import importlib.util,json,subprocess,sys,tempfile,unittest,zipfile,urllib.parse,hashlib,io,urllib.error
+from unittest.mock import patch
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];PKG=ROOT/'plugins/mudelitehas';SKILL=PKG/'skills/mudelitehas'
 def module(name):
@@ -23,4 +24,8 @@ class PackageTests(unittest.TestCase):
   f=module('run').fingerprints();self.assertEqual(set(f),{'reconstruction','mesh','skin','pose','finish','render','version'});self.assertTrue(all(len(v)==64 for k,v in f.items() if k!='version'))
  def test_pinned_runtime_digest(self):
   m=module('install_runtime');self.assertEqual(len(m.SHA256),64);self.assertEqual(m.SHA256,'975c58fcb244273838534bba771e64ad87739216b0f9b39a888531a49a72d845')
+ def test_download_falls_back_and_verifies_bytes_before_publishing(self):
+  m=module('install_runtime');content=b'verified archive'
+  with tempfile.TemporaryDirectory() as d,patch.object(m,'SHA256',hashlib.sha256(content).hexdigest()),patch.object(m.urllib.request,'urlopen',side_effect=[urllib.error.HTTPError(m.URL,403,'Forbidden',{},None),io.BytesIO(b'wrong data'),io.BytesIO(content)]) as get:
+   archive=Path(d)/'blender.tar.xz';m.download_archive(archive);self.assertEqual(archive.read_bytes(),content);self.assertEqual(get.call_count,3);self.assertFalse(archive.with_suffix('.xz.part').exists())
 if __name__=='__main__':unittest.main()
