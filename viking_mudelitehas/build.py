@@ -224,7 +224,8 @@ stats={"pipeline":"2D four views -> saved cloud -> Poisson mesh -> exact Blender
  "Axe, shield and fasteners are independent equipment meshes and not part of the 8000 body quads"]}
 (OUT/"validation.json").write_text(json.dumps(stats,indent=2))
 # Studio, render true model from 4 sides (not AI preview images).
-scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=12;scene.cycles.device='CPU'
+scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=12;scene.cycles.device='CPU';scene.cycles.use_denoising=False
+for layer in scene.view_layers:layer.cycles.use_denoising=False
 scene.render.resolution_x=700;scene.render.resolution_y=790;scene.render.resolution_percentage=100
 scene.world.color=(.15,.17,.2)
 def aim(o,pos):o.rotation_euler=(Vector(pos)-o.location).to_track_quat('-Z','Y').to_euler()
