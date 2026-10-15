@@ -1,10 +1,6 @@
-name: Mudelitehas - Tase 2 - Karu ja jooksuanimatsioon
+name: Mudelitehas - Tase 2 - Pärandnäide poseeritud karu
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'teddy_mudelitehas/**'
 permissions:
   contents: read
 jobs:

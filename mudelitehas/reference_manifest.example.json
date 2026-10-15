@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "reference_role": "rest_pose",
+  "body_plan": "quadruped",
+  "rest_pose": "quadruped_stand",
+  "views": ["front", "left", "back", "right"],
+  "source_input_sha256": "REPLACE_WITH_ACTUAL_B85_FILE_SHA256",
+  "same_identity": false,
+  "same_pose": false,
+  "registered_scale": false,
+  "limbs_separated": false,
+  "requested_pose_reference": "path/to/requested_pose_concept.png",
+  "visual_review": {
+    "status": "pending",
+    "reviewer": "",
+    "notes": "Review all four actual images before approving. Record inferred joints and uncertain depths."
+  }
+}

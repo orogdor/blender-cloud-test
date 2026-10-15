@@ -1,10 +1,6 @@
-name: Mudelitehas - Tase 3 - Koera taiustatud test
+name: Mudelitehas - Tase 3 - Pärandnäide poseeritud koer
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'dog_mudelitehas/**'
 permissions:
   contents: read
 jobs:

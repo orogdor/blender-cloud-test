@@ -10,7 +10,11 @@ on:
       source_input:
         description: 'Joondatud nelja vaate .b85 andmefaili tee hoidlas'
         required: true
-        default: 'teddy_mudelitehas/teddy_inputs.b85'
+        type: string
+      reference_manifest:
+        description: 'Ehituspoosi nelivaate visuaalse ülevaatuse manifesti tee (elusolendil nõutav)'
+        required: false
+        default: ''
         type: string
 permissions:
   contents: read
@@ -30,6 +34,7 @@ jobs:
           d=json.load(open('output/mudelitehas_level1/request.json'))
           assert d['level']==1,'Vali selle töövoo jaoks tase 1'
           assert not d['animation_requested'],'Taseme 1 põhiretsept on staatiline'
+          assert not d['pose_plan']['requires_rig'],'Elusolendi jaoks koosta ehituspoosi nelivaatest mudelipõhine luustiku/poosiretsept; staatiline baasretsept ei ole selle asendus'
           assert d['quad_faces']>=256 and d['quad_faces']%2==0,'Kasuta paarisarvu alates 256-st'
           PY
       - name: Install Blender and reconstruction dependencies
@@ -41,7 +46,8 @@ jobs:
       - name: Four views to real point cloud to surface
         env:
           SOURCE_INPUT: ${{ inputs.source_input }}
-        run: /tmp/mudelitehas-level1/bin/python mudelitehas/reconstruct_level1.py --input "$SOURCE_INPUT" --request output/mudelitehas_level1/request.json
+          REFERENCE_MANIFEST: ${{ inputs.reference_manifest }}
+        run: /tmp/mudelitehas-level1/bin/python mudelitehas/reconstruct_level1.py --input "$SOURCE_INPUT" --reference-manifest "$REFERENCE_MANIFEST" --request output/mudelitehas_level1/request.json
       - name: Build simple closed mesh and preview
         run: PYTHONPATH=/usr/lib/python3/dist-packages blender --background --factory-startup --python-exit-code 1 --python mudelitehas/build_level1.py -- --request output/mudelitehas_level1/request.json
       - uses: actions/upload-artifact@v4

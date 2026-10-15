@@ -3,6 +3,10 @@ import argparse
 import json
 from pathlib import Path
 import re
+try:
+    from .pose_plan import plan_pose
+except ImportError:
+    from pose_plan import plan_pose
 
 ROOT = Path(__file__).resolve().parent
 
@@ -16,15 +20,18 @@ def parse_command(command):
         raise ValueError("Nelinurkade arv peab olema vähemalt 4.")
     profiles = json.loads((ROOT / "profiles.json").read_text(encoding="utf-8"))
     animation_requested = bool(re.search(r"\b\w*animatsiooniga\b|\banimatsioon\s*=", description, re.IGNORECASE))
+    pose=plan_pose(description,animation_requested)
+    pipeline=profiles['living_pipeline'] if pose['subject_kind']=='living' else profiles['shared_pipeline']
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "command": f"Mudelitehas {faces} {level} {description}",
         "quad_faces": faces,
         "level": level,
         "description": description,
         "animation_requested": animation_requested,
         "budget_scope": profiles["budget_scope"],
-        "pipeline": profiles["shared_pipeline"],
+        "pipeline": pipeline,
+        "pose_plan": pose,
         "profile": profiles["levels"][str(level)],
         "needs_prepared_reference_images": True,
     }

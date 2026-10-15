@@ -1,21 +1,37 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "command_format": "Mudelitehas <nelinurkade_arv> <tase_1_2_3> <mudeli_kirjeldus>",
   "geometry_unit": "quads",
   "budget_scope": "primary_surface",
-  "shared_pipeline": ["2D concept", "four consistent views", "point cloud", "mesh"],
+  "shared_pipeline": [
+    "2D concept",
+    "four consistent views",
+    "point cloud",
+    "mesh"
+  ],
   "levels": {
     "1": {
       "name": "Kiire",
       "description": "Lihtne kinnine mesh, üks põhivärv ja kiire eelvaade.",
-      "grid_limit": [80, 80, 140],
+      "grid_limit": [
+        80,
+        80,
+        140
+      ],
       "poisson_depth": 7,
       "materials": "single_basic_material",
       "rig": "not_in_basic_recipe",
       "pbr_maps": false,
       "lod": false,
       "view_comparison": false,
-      "outputs": ["GLB", "BLEND", "preview PNG", "point cloud", "validation"]
+      "outputs": [
+        "GLB",
+        "BLEND",
+        "preview PNG",
+        "point cloud",
+        "validation"
+      ],
+      "living_pose_policy": "pose_policy"
     },
     "2": {
       "name": "Tavaline",
@@ -26,7 +42,15 @@
       "pbr_maps": false,
       "lod": false,
       "view_comparison": false,
-      "outputs": ["GLB", "BLEND", "preview", "point cloud", "validation"]
+      "outputs": [
+        "GLB",
+        "BLEND",
+        "preview",
+        "point cloud",
+        "validation"
+      ],
+      "living_pose_policy": "pose_policy",
+      "example_recipe_status": "legacy_posed_reference_example; not a neutral-pose template"
     },
     "3": {
       "name": "Täiustatud",
@@ -37,7 +61,39 @@
       "pbr_maps": true,
       "lod": true,
       "view_comparison": true,
-      "outputs": ["GLB", "BLEND", "LOD GLB", "preview", "point cloud", "multi_view_comparison", "validation"]
+      "outputs": [
+        "GLB",
+        "BLEND",
+        "LOD GLB",
+        "preview",
+        "point cloud",
+        "multi_view_comparison",
+        "validation"
+      ],
+      "living_pose_policy": "pose_policy",
+      "example_recipe_status": "legacy_posed_reference_example; not a neutral-pose template"
     }
+  },
+  "living_pipeline": [
+    "2D concept in requested pose",
+    "four consistent views in rig-friendly rest pose",
+    "point cloud in rest pose",
+    "mesh in rest pose",
+    "skeleton and skin weights",
+    "animation from rest pose to requested pose",
+    "final pose comparison"
+  ],
+  "pose_policy": {
+    "requested_pose_and_rest_pose_are_distinct": true,
+    "humanoid_rest_pose": "humanoid_t",
+    "quadruped_rest_pose": "quadruped_stand",
+    "other_creatures": "review body plan and neutral pose first",
+    "preserve_identity_between_poses": true,
+    "reference_manifest_required_for_living_subjects": true,
+    "visual_pose_review_is_not_pixel_verified_by_manifest_validator": true,
+    "organic_shape": "rounded cross sections plus locally reviewed anatomical depth; smooth shading alone is insufficient",
+    "rig_required_when_target_pose_or_animation_is_requested": true,
+    "quality_levels_do_not_skip_rest_pose_policy": true,
+    "rig_required_for_new_living_subjects": true
   }
 }

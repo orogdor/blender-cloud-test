@@ -10,6 +10,7 @@ def main():
     request=json.loads(args.request.read_text());out=args.output;out.mkdir(parents=True,exist_ok=True)
     if request['level']!=1:ap.error('See Blenderi retsept on taseme 1 jaoks.')
     if request['animation_requested']:ap.error('Taseme 1 põhiretsept loob staatilise meshi. Animatsiooniga mudelile koosta eraldi lihtne luustik või kasuta taset 2/3.')
+    if request.get('pose_plan',{}).get('requires_rig'):ap.error('Tellitud poos vajab luustikuga poseerimist ehituspoosist; staatiline põhiretsept seda ei asenda.')
     target=request['quad_faces']
     if target<256 or target%2:ap.error('Praegune täpse nelinurkade arvu retsept toetab paarisarvu alates 256-st.')
     # Reuse validated geometry helpers; run_path does not run the character build.
