@@ -1,0 +1,6 @@
+
+# Local Mudelitehas runs and dependency caches
+runs/
+__pycache__/
+*.pyc
+dist/

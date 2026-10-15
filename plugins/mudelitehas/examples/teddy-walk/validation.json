@@ -1,0 +1,179 @@
+{
+  "frames_checked": [
+    1,
+    5,
+    9,
+    13,
+    17,
+    21,
+    25,
+    29,
+    33,
+    37,
+    41,
+    45,
+    49
+  ],
+  "finite": true,
+  "loop_seam_m": 0.0,
+  "max_skin_motion_m": 0.30568622237427645,
+  "minimum_z_m": 0.0009999716421589255,
+  "stance_sole_min_z_range_m": [
+    0.0009999716421589255,
+    0.0011452515609562397
+  ],
+  "skin_stretch_p999_edges_over_3mm": 1.5436277621703,
+  "max_edge_length_change_m": 0.020092814334535792,
+  "bone_length_error_m": 5.93168994200699e-08,
+  "root_motion": "in-place gait; stance feet move backward relative to stationary root",
+  "collision_check": "multi-view visual review, not exhaustive collision proof",
+  "topology": {
+    "vertices": 10002,
+    "faces": 10000,
+    "quad_faces": 10000,
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "nonmanifold_vertices": 0,
+    "loose_vertices": 0,
+    "components": 1,
+    "volume": 0.326062
+  },
+  "joint_correctives": {
+    "shape_keys": [
+      "WalkJoint_01",
+      "WalkJoint_07",
+      "WalkJoint_13",
+      "WalkJoint_19",
+      "WalkJoint_25",
+      "WalkJoint_31",
+      "WalkJoint_37",
+      "WalkJoint_43"
+    ],
+    "corrective_reference_errors_m": [
+      1.8863363416749483e-07,
+      1.9097336557472194e-07,
+      2.1542358837725164e-07,
+      1.9097336557472194e-07,
+      1.8863363416749483e-07,
+      1.7943374184954607e-07,
+      1.9314112360500873e-07,
+      1.7943374184954607e-07
+    ],
+    "method": "Bound corrective smooth converted to synchronized exportable morph targets"
+  },
+  "fiber_triangles": 6148,
+  "main_glb": {
+    "skins": 1,
+    "animations": [
+      "Walk_Loop"
+    ],
+    "animation_paths": [
+      "rotation",
+      "scale",
+      "translation",
+      "weights"
+    ],
+    "triangles": 30900,
+    "textures": 3,
+    "bytes": 13661880
+  },
+  "lod_glb": {
+    "skins": 1,
+    "animations": [
+      "Walk_Loop"
+    ],
+    "animation_paths": [
+      "rotation",
+      "scale",
+      "translation",
+      "weights"
+    ],
+    "triangles": 12752,
+    "textures": 3,
+    "bytes": 9209956
+  },
+  "command": "Mudelitehas 10000 3 jalutav m\u00e4ngukaru animatsiooniga",
+  "bones": 23,
+  "primary_quad_faces": 10000,
+  "rest_pose": "T-pose, frame 0",
+  "animation": "Walk_Loop, frames 1-49 at 24 fps",
+  "pipeline": "requested-pose image -> neutral four views -> oriented cloud saved before Poisson mesh -> exact 10000 quads -> rig and skin -> pose gate -> joint corrective morphs -> PBR -> export and reimport validation",
+  "limitations": [
+    "Estimated plush toy shape, not a scan or exact copy of generated reference.",
+    "Short polygon fibers approximate pile; not a dense strand groom.",
+    "In-place gait requires matching movement speed in a game."
+  ],
+  "timings_seconds": {
+    "load_pose_cache": 0.01753901299980498,
+    "bake_joint_shapes": 2.360443875999863,
+    "final_deformation": 0.6823334010000508,
+    "plush_PBR": 4.74987391600007,
+    "face_details": 0.05109029400000509,
+    "short_plush_fibers": 0.36767782200013244,
+    "export_main": 0.8840094580000368,
+    "game_lod": 0.5250706629999513,
+    "export_lod": 0.5920240749996992,
+    "final_controls": 41.20743057400023,
+    "walk_GIF": 152.43554960599977
+  },
+  "finish_seconds": 203.95972771700008,
+  "final_mesh_silhouette_iou": {
+    "front": 0.8569082948187788,
+    "left": 0.8082983609153536,
+    "back": 0.8530250802329727,
+    "right": 0.7973447871925029
+  },
+  "export_reimport_validation": {
+    "Jalutav_Mangukaru_10000.glb": {
+      "armatures": 1,
+      "bones": 23,
+      "morph_targets": 8,
+      "frames_checked": [
+        1,
+        13,
+        25,
+        37,
+        49
+      ],
+      "loop_seam_m": 0.0,
+      "max_skin_motion_m": 0.30568646774108815,
+      "minimum_z_m": 0.0010000214679166675,
+      "distance_to_source_vertices_m": [
+        2.977521944558248e-05,
+        2.9194909075158648e-05,
+        2.8797525374102406e-05,
+        2.940697959274985e-05,
+        2.977521944558248e-05
+      ]
+    },
+    "Jalutav_Mangukaru_LOD.glb": {
+      "armatures": 1,
+      "bones": 23,
+      "morph_targets": 8,
+      "frames_checked": [
+        1,
+        13,
+        25,
+        37,
+        49
+      ],
+      "loop_seam_m": 0.0,
+      "max_skin_motion_m": 0.30565547392131354,
+      "minimum_z_m": 0.0011930629843845963,
+      "distance_to_source_vertices_m": [
+        0.01530702505260706,
+        0.015975838527083397,
+        0.015528928488492966,
+        0.015306941233575344,
+        0.01530702505260706
+      ]
+    }
+  },
+  "visual_review": {
+    "rest_front_side_back": "reviewed",
+    "walking_phases": "reviewed",
+    "face_and_materials": "reviewed",
+    "gait_phase": "opposite arm and forward foot verified",
+    "fur": "short skinned polygon fibers with matched corrective keys"
+  }
+}

@@ -1,0 +1,18 @@
+name: 'Mudelitehas: täiendusettepanek'
+description: 'Paku uus kehaehitus, parandus või töövoo täiendus.'
+title: '[Mudelitehas idee] '
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Millist tulemust vajad?
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Näidiskäsk või võrdluspilt
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Kuidas kontrollime, et täiendus töötab?

@@ -1,0 +1,54 @@
+{
+  "version": "0.1.0",
+  "recipe": "teddy-walk",
+  "provenance": "Exact files of the last user-reviewed walking teddy created in this conversation; not regenerated for the release.",
+  "primary_quad_faces": 10000,
+  "bones": 23,
+  "animation": "Walk_Loop",
+  "files": {
+    "Jalutav_Mangukaru_10000.glb": {
+      "sha256": "b13b5e5ff37028d48394203cf62c3217807de5ef8cb86efbc17621bcc901771f",
+      "bytes": 13663860
+    },
+    "Jalutav_Mangukaru_LOD.glb": {
+      "sha256": "bf4c482a1ae4109afd6e82d3a399a300a4c38a4ca2c6a82a842f95727f9544b4",
+      "bytes": 9210024
+    },
+    "Jalutav_Mangukaru_10000.blend": {
+      "sha256": "dd200c001cdfbdee83787516bff2e448d0fd7202d3af7f94313d929fc075a435",
+      "bytes": 16598120
+    },
+    "Jalutav_Mangukaru_Uus.gif": {
+      "sha256": "945a3df139e86af93b611bfa7c78a6aab89f63e419dc3a80a284682ad9ea10f4",
+      "bytes": 2549332
+    },
+    "Jalutav_Mangukaru_Uus.png": {
+      "sha256": "5c46666c508bb82adf45166d6897d88ecdd16b642592cdadc8f089b54cc3a24c",
+      "bytes": 316664
+    },
+    "Control_views.jpg": {
+      "sha256": "d39a57df7cce753dee15f02ed0dcd4629d7fc1850046fba67c8cb46c4c493c00",
+      "bytes": 139844
+    },
+    "04_point_cloud.npz": {
+      "sha256": "05af81d2f0dc83d504d7b056fb103dcd1fcd82f15e8f50177b53876b50e62c27",
+      "bytes": 1501080
+    },
+    "pipeline.json": {
+      "sha256": "c5a034dfb680146ab67086f40b127676763d0ab910ed5b224b5334d216496522",
+      "bytes": 1021
+    },
+    "validation.json": {
+      "sha256": "2248a2d27ef556d71580671e7a3a1824ad61fc1094b50036820c7eacd53dc0e5",
+      "bytes": 4741
+    },
+    "export_reimport_validation.json": {
+      "sha256": "f8f4061bc54b0720d8b55a199d871cb61c6f8001dcd1fe6a38827ebefbe04ec8",
+      "bytes": 957
+    },
+    "deformation_samples.npz": {
+      "sha256": "860daf64a12a0bb20f8346d372f7b795bbe160732c61ab3c42ab48bce135147e",
+      "bytes": 1804293
+    }
+  }
+}

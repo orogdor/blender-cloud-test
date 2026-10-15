@@ -9,3 +9,7 @@ This repository runs Blender inside GitHub Actions, generates an armored soldier
 4. Download source `.blend`, `.glb`, and PNG previews from the workflow artifact `soldier-build-output`.
 
 This is a procedural prototype, without realistic anatomy or animation. The full Blender script is in `scripts/create_soldier.py`.
+
+## Mudelitehas 0.1 — jagatav töövoog
+
+[**Ava Mudelitehas 0.1**](plugins/mudelitehas/README.md): jagatav oskus ja Blenderi mootor, mille põhikatsena kasutatakse viimast jalutavat mängukaru. Kaasas on valmis GLB/BLEND, etappide taaskasutus, kontrolliaruanded ja tagasiside vorm. Varasemad katsed jäävad selles repositooriumis ajalooks alles.

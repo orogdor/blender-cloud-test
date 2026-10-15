@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "plugin_version": "0.1.0",
+  "command": "Mudelitehas 10000 3 jalutav mängukaru animatsiooniga",
+  "recipe": "teddy-walk",
+  "quad_faces": 10000,
+  "budget_scope": "primary_body",
+  "level": 3,
+  "rest_pose": "biped T-pose",
+  "animation": "Walk_Loop",
+  "blender_version": "4.5.3",
+  "limitations": "Validated teddy recipe only; not a universal arbitrary creature generator."
+}

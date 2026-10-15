@@ -1,0 +1,46 @@
+{
+  "Jalutav_Mangukaru_10000.glb": {
+    "armatures": 1,
+    "bones": 23,
+    "morph_targets": 8,
+    "frames_checked": [
+      1,
+      13,
+      25,
+      37,
+      49
+    ],
+    "loop_seam_m": 0.0,
+    "max_skin_motion_m": 0.30568646774108815,
+    "minimum_z_m": 0.0010000214679166675,
+    "distance_to_source_vertices_m": [
+      2.977521944558248e-05,
+      2.9194909075158648e-05,
+      2.8797525374102406e-05,
+      2.940697959274985e-05,
+      2.977521944558248e-05
+    ]
+  },
+  "Jalutav_Mangukaru_LOD.glb": {
+    "armatures": 1,
+    "bones": 23,
+    "morph_targets": 8,
+    "frames_checked": [
+      1,
+      13,
+      25,
+      37,
+      49
+    ],
+    "loop_seam_m": 0.0,
+    "max_skin_motion_m": 0.30565547392131354,
+    "minimum_z_m": 0.0011930629843845963,
+    "distance_to_source_vertices_m": [
+      0.01530702505260706,
+      0.015975838527083397,
+      0.015528928488492966,
+      0.015306941233575344,
+      0.01530702505260706
+    ]
+  }
+}

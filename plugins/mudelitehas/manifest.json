@@ -1,0 +1,12 @@
+{
+  "format": "mudelitehas-skill-bundle/v1",
+  "name": "Mudelitehas",
+  "version": "0.1.0",
+  "status": "test-release",
+  "skill": "skills/mudelitehas",
+  "runtime": "Blender 4.5.3",
+  "baseline": "examples/teddy-walk/canonical-manifest.json",
+  "feedback": "https://github.com/orogdor/blender-cloud-test/issues/new?template=mudelitehas-feedback.yml",
+  "hosted_service": false,
+  "scope": "Validated 10000-quad walking teddy example; no automatic arbitrary character generation"
+}

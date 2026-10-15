@@ -1,0 +1,11 @@
+{
+  "references/01_walking_concept.png": "0eb04a2f69a5385b56d8a9b6bc98a27ac02c2e3ac3d5fa4c61ec5401b03a592f",
+  "references/02_neutral_four_views.png": "ec60e9a5b6d080e511055290968152e7573052bd1ed29cd1cccf1527dd2b272e",
+  "references/aligned_back.png": "75bf9df87a739ca78c4949a4041eef03d80d702eb8b8951b3834ceb74a48b597",
+  "references/aligned_front.png": "db1202f5c184b21fb47adedaf6855d80cbf978ec5623d3854b58b440b660c64e",
+  "references/aligned_left.png": "c031eabfdee5d87a20dcf210b2e5eef339f6aeb472baf2f60aea443b78f607a2",
+  "references/aligned_right.png": "24f80faab41e0ea2ca6f26ba3d84eacaf41e0cfbc92c0532dbb37f34ae97baa2",
+  "references/calibration.json": "6a08b5b0f968e0ec5e34383adb6f7d7c91d26e118f1508bd41b0f250cb18aca6",
+  "references/prompts.txt": "4ff127b6c6ca2fd39237170981997047ea63a7948d44cc8355074d662c2e817e",
+  "references/reference_review.json": "5535b26f8f54a0dbfccbc5c9a1943612b8f03cb3758757cd532659fa0902d606"
+}

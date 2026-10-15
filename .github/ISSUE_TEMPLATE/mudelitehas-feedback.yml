@@ -1,0 +1,48 @@
+name: 'Mudelitehas: mudeli tagasiside'
+description: 'Teata Mudelitehase mudeli, animatsiooni või töövoo veast.'
+title: '[Mudelitehas] '
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Versioon
+      description: 'Näiteks 0.1.0; ära kasuta ainult sõna latest.'
+      value: '0.1.0'
+    validations:
+      required: true
+  - type: input
+    id: recipe
+    attributes:
+      label: Retsept või mudel
+      value: teddy-walk
+    validations:
+      required: true
+  - type: input
+    id: run_id
+    attributes:
+      label: Töö ID
+      description: 'Vaata output/run_manifest.json; valmis näidise puhul kirjuta canonical-teddy-v0.1.0.'
+  - type: dropdown
+    id: category
+    attributes:
+      label: Vea liik
+      options: [shape, rig, animation, material, export, performance]
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Mida märkasid?
+      description: 'Kirjelda tegelikku ja oodatud tulemust. Siia võib lohistada pildi või feedback ZIP-i.'
+    validations:
+      required: true
+  - type: input
+    id: frame
+    attributes:
+      label: Animatsioon ja kaader
+      placeholder: 'Walk_Loop, kaader 13; 0 = ehituspoos'
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Kuidas viga korrata?
+      description: 'Käsk, kasutatud mudelifail ja vaatamise rakendus. Ära lisa paroole ega võtmeid.'

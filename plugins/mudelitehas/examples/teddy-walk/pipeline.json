@@ -1,0 +1,33 @@
+{
+  "command": "Mudelitehas 10000 3 jalutav m\u00e4ngukaru animatsiooniga",
+  "rest_pose": "biped T-pose",
+  "requested_pose": "upright walking",
+  "cloud_created_before_mesh": true,
+  "cloud_points": 44951,
+  "source_silhouette_iou": {
+    "front": 0.8822132943754566,
+    "back": 0.8841401540022682,
+    "left": 0.8233475986685687,
+    "right": 0.811328125
+  },
+  "depth_estimated_not_measured": true,
+  "reference_review": {
+    "status": "visually_reviewed",
+    "same_identity": true,
+    "arms_separated_in_front_and_back": true,
+    "legs_separated": true,
+    "side_limbs_occluded_as_expected": true,
+    "sha256": "ec60e9a5b6d080e511055290968152e7573052bd1ed29cd1cccf1527dd2b272e"
+  },
+  "inferred_parts": [
+    "cross-section depth",
+    "far limb thickness",
+    "joint centers",
+    "plush volume"
+  ],
+  "limitations": [
+    "Generated views have minor proportion inconsistencies.",
+    "Shape is silhouette-constrained anatomical estimation, not a scan."
+  ],
+  "reconstruction_seconds": 7.952874707999854
+}

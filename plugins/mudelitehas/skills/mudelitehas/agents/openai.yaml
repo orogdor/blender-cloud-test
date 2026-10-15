@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mudelitehas 0.1"
+  short_description: "3D mudelid punktipilvest ja kõndiv mängukaru"
+  default_prompt: "Kasuta $mudelitehas oskust ja loo mängukaru näidis käsuga Mudelitehas 10000 3 jalutav mängukaru animatsiooniga."
