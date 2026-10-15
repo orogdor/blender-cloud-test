@@ -52,7 +52,8 @@ jobs:
           git add site/viking/viiking.glb
           if ! git diff --cached --quiet; then
             git commit -m "Publish Mudelitehas 8000 Viking Blender GLB for viewer"
-            git push
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
       - name: Upload BLEND GLB actual renders and genuine point-cloud stages
         uses: actions/upload-artifact@v4
