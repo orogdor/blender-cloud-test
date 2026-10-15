@@ -53,7 +53,7 @@ document.getElementById('right').onclick=()=>setView(5,1.14,0);
 document.getElementById('fit').onclick=()=>setView(2.9,2.2,5.3);
 document.getElementById('orbit').onclick=e=>{turn=!turn;e.currentTarget.classList.toggle('active',turn)};
 document.getElementById('wire').onclick=e=>{showWire=!showWire;e.currentTarget.classList.toggle('active',showWire);if(model)model.traverse(o=>{if(o.isMesh)for(const m of(Array.isArray(o.material)?o.material:[o.material]))m.wireframe=showWire})};
-document.getElementById('gear').onclick=e=>{showGear=!showGear;e.currentTarget.classList.toggle('active',showGear);if(model)model.traverse(o=>{if(o.isMesh&&o.name!=='VikingBody_8000_TRUE_QUADS')o.visible=showGear})};
+document.getElementById('gear').onclick=e=>{showGear=!showGear;e.currentTarget.classList.toggle('active',showGear);if(model)model.traverse(o=>{if(o.isMesh&&!o.name.startsWith('VikingBody_8000_TRUE_QUADS'))o.visible=showGear})};
 new GLTFLoader().load('./viiking.glb',g=>{model=g.scene;scene.add(model);message.textContent='Mudelitehase päris 3D-mudel. Lohista pööramiseks.';setTimeout(()=>message.style.display='none',2800)},undefined,e=>{console.error(e);message.innerHTML='GLB laadimine ebaõnnestus. Ava leht HTTP-serveri kaudu; mudel peab olema samas kaustas nimega viiking.glb.'});
 renderer.setAnimationLoop(()=>{if(model&&turn)model.rotation.y+=.0026;orbit.update();renderer.render(scene,camera)});
 </script></body></html>
