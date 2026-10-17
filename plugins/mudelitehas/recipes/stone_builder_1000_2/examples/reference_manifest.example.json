@@ -1,0 +1,25 @@
+{
+  "recipe": "stone-builder-1000-2",
+  "character": "stone_age_builder",
+  "quad_budget": 1000,
+  "budget_scope": "whole_character_including_rigid_tool",
+  "level": 2,
+  "rest_pose": "T-pose",
+  "same_identity": false,
+  "same_pose": false,
+  "registered_scale": false,
+  "limbs_separated": false,
+  "synthetic_test": false,
+  "requested_pose_reference": "references/stone_builder_working_concept.png",
+  "visual_review": {
+    "status": "pending",
+    "reviewer": "",
+    "reviewed_at": "",
+    "notes": "Compare face, costume, proportions and independent top/depth evidence before approving."
+  },
+  "views": [
+    {"direction":"front","source_type":"reviewed_generated","image":"references/front.png","mask":"references/front_mask.png","image_sha256":"","mask_sha256":"","origin_pixels":[256,470],"pixels_per_meter":215,"is_mirror_copy":false,"landmark_notes":[]},
+    {"direction":"right","source_type":"reviewed_generated","image":"references/right.png","mask":"references/right_mask.png","image_sha256":"","mask_sha256":"","origin_pixels":[256,470],"pixels_per_meter":215,"is_mirror_copy":false,"landmark_notes":[]},
+    {"direction":"top","source_type":"reviewed_generated","image":"references/top.png","mask":"references/top_mask.png","image_sha256":"","mask_sha256":"","origin_pixels":[256,256],"pixels_per_meter":215,"is_mirror_copy":false,"landmark_notes":[]}
+  ]
+}

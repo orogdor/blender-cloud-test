@@ -1,0 +1,69 @@
+name: Mudelitehas - Kiviaja ehitaja 1000 2
+on:
+  push:
+    paths:
+      - 'plugins/mudelitehas/recipes/stone_builder_1000_2/**'
+      - '.github/workflows/stone-builder-1000-2.yml'
+  workflow_dispatch:
+    inputs:
+      run_real_build:
+        description: 'Paigalda Blender ja ehita mudel pärast päris võrdluspiltide ülevaatust'
+        type: boolean
+        required: true
+        default: false
+      manifest_path:
+        description: 'Päriselt üle vaadatud referents-manifesti tee hoidlas'
+        type: string
+        required: false
+        default: 'plugins/mudelitehas/recipes/stone_builder_1000_2/inputs/manifest.json'
+
+permissions:
+  contents: read
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install numpy==1.26.4 scipy==1.14.1 Pillow==11.3.0
+      - name: Kontrolli retsepti sünteetiliste testandmetega (mitte mudelit)
+        run: |
+          cd plugins/mudelitehas/recipes/stone_builder_1000_2
+          python -m unittest discover -s tests -v
+  production:
+    if: github.event_name == 'workflow_dispatch' && inputs.run_real_build
+    needs: python-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install numpy==1.26.4 scipy==1.14.1 Pillow==11.3.0
+      - name: Kontrolli referentsid enne Blenderi allalaadimist
+        env:
+          INPUT_MANIFEST: ${{ inputs.manifest_path }}
+        run: |
+          test -f "$INPUT_MANIFEST"
+          python plugins/mudelitehas/recipes/stone_builder_1000_2/recipe/preflight.py --manifest "$INPUT_MANIFEST" --output "$RUNNER_TEMP/stonebuilder_preflight.json"
+      - name: Paigalda ametlik Blender 4.5.3 (kontrollitud hash)
+        run: python plugins/mudelitehas/skills/mudelitehas/scripts/install_runtime.py --directory "$RUNNER_TEMP/blender-runtime"
+      - name: Kolme suuna punktipilv, retopoloogia ja GLB
+        env:
+          INPUT_MANIFEST: ${{ inputs.manifest_path }}
+        run: |
+          python plugins/mudelitehas/recipes/stone_builder_1000_2/recipe/run.py --manifest "$INPUT_MANIFEST" --workdir "$RUNNER_TEMP/stone-builder-1000-2" --blender "$BLENDER"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stone-builder-1000-2-run
+          path: |
+            ${{ runner.temp }}/stone-builder-1000-2/
+            ${{ runner.temp }}/stonebuilder_preflight.json
+          if-no-files-found: warn
+          retention-days: 14
