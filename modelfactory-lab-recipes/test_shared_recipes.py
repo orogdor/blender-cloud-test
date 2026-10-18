@@ -49,7 +49,7 @@ class SharedTests(unittest.TestCase):
         c=delivered(c,'r','two','needs_repair');c=rate(c,'two',5,'e2');self.assertEqual(pool(c,REQ),[])
         c=delivered(c,'r','three');c=rate(c,'three',5,'e3');self.assertEqual(len(pool(c,REQ)),1)
     def test_corrected_rating_removes_old_five(self):
-        c=delivered(self.seed(),'r','d');c=rate(c,'d',5,'e1');c=rate(c,'d',2,'e2',at=2)
+        c=delivered(self.seed(),'r','d');c=rate(c,'d',5,'e1');c=rate(c,'d',2,'e2',at=0)
         self.assertEqual(pool(c,REQ),[]);self.assertEqual(stats(c)['r']['count'],1)
     def test_pool_keeps_ten_and_archives_all(self):
         c=empty_catalog()

@@ -18,7 +18,7 @@ python scripts/shared_recipes.py --cache <LAB>/shared-cache add --source <source
 python scripts/shared_recipes.py --cache <LAB>/shared-cache delivered --recipe-id <id> --run-id <globally-unique-run-id> --model <actual-model.glb> --gate <actual-quality-gate.json>
 ```
 
-`request.json` requires `family`, canonical `kind`, `quads` and `level`. Save the actual gate, not an invented pass. Use accepted/accepted_with_limitations only after current gate and actual export/visual checks pass; otherwise needs_repair. A delivery binds the exact model hash and gate hash. Keep `delivery_id` and `model_sha256` with the user-facing model. For a batch, register one delivery per model, not one ambiguous batch score. Do not rate the artifact yourself or generate ratings in a production catalog to test promotion.
+`request.json` requires `family`, canonical `kind`, `quads` and `level`. Save the actual gate, not an invented pass. Use accepted/accepted_with_limitations only after current gate and actual export/visual checks pass; otherwise needs_repair. For an accepted delivery the CLI reruns the current acceptance gate and independently checks actual GLB export/project budget before recording eligibility. A delivery binds the exact model hash and gate hash. Keep `delivery_id` and `model_sha256` with the user-facing model. For a batch, register one delivery per model, not one ambiguous batch score. Do not rate the artifact yourself or generate ratings in a production catalog to test promotion.
 
 After every delivered model, include: **“Hinda selle mudeli kuju 1–5. Mis vajab parandamist?”** For a batch ask for each named model's score in one compact question. Do not repeatedly ask after a status question or plugin-only edit that created no model. On the user's reply, save only an explicit numeric shape rating for the identifiable delivery. “Looks better” is not 5. Ask which model only when the target is actually ambiguous. The current user has authorized this shared recipe/feedback workflow; do not request repeated publication permission.
 
@@ -26,7 +26,7 @@ After every delivered model, include: **“Hinda selle mudeli kuju 1–5. Mis va
 python scripts/shared_recipes.py --cache <LAB>/shared-cache rate --delivery-id <id> --model-sha256 <hash> --score 5
 ```
 
-One delivery contributes one latest score; a correction replaces its old contribution. Feedback attaches to the delivered source version, never a newer replacement. A needs_repair delivery is not promotion-eligible even if rated 5. Revalidate, deliver the repaired version and obtain its own explicit feedback.
+Catalog-assigned sequence numbers order saved feedback across device clock differences. One delivery contributes one latest score; a correction replaces its old contribution. Feedback attaches to the delivered source version, never a newer replacement. A needs_repair delivery is not promotion-eligible even if rated 5. Revalidate, deliver the repaired version and obtain its own explicit feedback.
 
 ## Active pool and improvements
 

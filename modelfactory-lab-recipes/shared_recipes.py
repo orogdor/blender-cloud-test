@@ -92,7 +92,12 @@ def apply(catalog, op):
         if not delivery or delivery['model_sha256']!=data['model_sha256']:
             raise ValueError('Rating must identify the delivered model, not just a recipe name')
         old=c['ratings'].get(data['id'])
-        if old and old!=data:raise ValueError('Rating event identity conflict')
+        if old:
+            original={k:v for k,v in old.items() if k!='sequence'}
+            if original!=data:raise ValueError('Rating event identity conflict')
+            return c
+        data=copy.deepcopy(data)
+        data['sequence']=1+max((v.get('sequence',0) for v in c['ratings'].values()),default=0)
         c['ratings'][data['id']]=data
     else:raise ValueError('Unknown operation')
     return c
@@ -102,7 +107,7 @@ def stats(c):
     latest={}
     for e in c['ratings'].values():
         d=e['delivery_id'];old=latest.get(d)
-        if old is None or (e['created_ns'],e['id'])>(old['created_ns'],old['id']):latest[d]=e
+        if old is None or (e.get('sequence',0),e['created_ns'],e['id'])>(old.get('sequence',0),old['created_ns'],old['id']):latest[d]=e
     result={}
     for did,e in latest.items():
         d=c['deliveries'][did]
@@ -148,7 +153,7 @@ def verify_delivery(request, model_path, gate_path):
     if actual['failed_gates'] or actual['acceptance_status']!=status:
         raise ValueError('Fresh acceptance checks do not agree with the saved passing gate')
     project=json.loads((root/'output/model.mflab.json').read_text())
-    if project_audit(project)['quad_faces_total']!=request['quads']:
+    if project_audit(project)['quad_faces_total']!=request['quads'] or any(len(f)!=4 for o in project['objects'] for f in o['faces']):
         raise ValueError('Actual project exceeds requested whole-model quad budget')
     verify_export(project,model_path)
     return status
@@ -173,7 +178,8 @@ class GitHub:
         return '/contents/'+urllib.parse.quote(self.prefix+'/'+name,safe='/')
     def read(self):
         d=self.request('GET',self.path('catalog.json')+'?ref='+urllib.parse.quote(self.branch,safe=''))
-        return validate(json.loads(base64.b64decode(d['content']))),d['sha']
+        value=json.loads(base64.b64decode(d['content'])) if d.get('content') else self.request('GET',self.path('catalog.json')+'?ref='+urllib.parse.quote(self.branch,safe=''),raw=True)
+        return validate(value),d['sha']
     def write(self,c,sha):
         if not self.token:raise PermissionError('GitHub write access unavailable; operation remains queued')
         self.request('PUT',self.path('catalog.json'),dict(message='Update ModelFactory Lab shared recipe catalog',
