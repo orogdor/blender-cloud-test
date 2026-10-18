@@ -1,0 +1,27 @@
+{
+  "id": "rock_outcrop_1000",
+  "quad_source": "rock_outcrop_1000.obj",
+  "quad_count": 360,
+  "triangles_glb": 720,
+  "under_1000_quads": true,
+  "bounds_xyz": [
+    [
+      -7.574151995990369,
+      0.0,
+      -5.973774407503141
+    ],
+    [
+      7.368094588518488,
+      6.7,
+      5.694059090726588
+    ]
+  ],
+  "materials": [
+    "rock",
+    "rockdark",
+    "rocklight"
+  ],
+  "source_views": "none / procedural original",
+  "multiview_certified": false,
+  "glb_bytes": 17456
+}

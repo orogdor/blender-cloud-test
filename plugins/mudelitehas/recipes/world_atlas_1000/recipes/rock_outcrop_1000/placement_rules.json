@@ -1,0 +1,14 @@
+{
+  "kind": "rock",
+  "allowed_biomes": [
+    "hills",
+    "mountain"
+  ],
+  "max_slope_degrees": 75,
+  "minimum_spacing_tiles": 1,
+  "rotation": "random Y-angle",
+  "instancing": true,
+  "game_hook": "mountain decoration",
+  "visible_only_if_discovered": false,
+  "notes_et": "Mängus kasutamiseks lisa instancing või GLBLoader; olemasolevat mängureeglistikku automaatselt ei muudeta."
+}

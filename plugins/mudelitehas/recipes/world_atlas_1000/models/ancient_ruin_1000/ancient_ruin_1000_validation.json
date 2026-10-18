@@ -1,0 +1,31 @@
+{
+  "id": "ancient_ruin_1000",
+  "quad_source": "ancient_ruin_1000.obj",
+  "quad_count": 402,
+  "triangles_glb": 804,
+  "under_1000_quads": true,
+  "bounds_xyz": [
+    [
+      -6.0,
+      0.0050000000000000044,
+      -6.0
+    ],
+    [
+      6.0,
+      6.5,
+      6.0
+    ]
+  ],
+  "materials": [
+    "earth",
+    "gold",
+    "lightstone",
+    "moss",
+    "rock",
+    "rocklight",
+    "stone"
+  ],
+  "source_views": "none / procedural original",
+  "multiview_certified": false,
+  "glb_bytes": 22328
+}

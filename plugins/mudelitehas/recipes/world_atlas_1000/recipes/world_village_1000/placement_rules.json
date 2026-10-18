@@ -1,0 +1,15 @@
+{
+  "kind": "village",
+  "allowed_biomes": [
+    "plains",
+    "forest_edge",
+    "river_near"
+  ],
+  "max_slope_degrees": 25,
+  "minimum_spacing_tiles": 8,
+  "rotation": "random Y-angle",
+  "instancing": false,
+  "game_hook": "discovery village reward once",
+  "visible_only_if_discovered": true,
+  "notes_et": "Mängus kasutamiseks lisa instancing või GLBLoader; olemasolevat mängureeglistikku automaatselt ei muudeta."
+}

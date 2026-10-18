@@ -1,0 +1,29 @@
+{
+  "id": "river_bridge_1000",
+  "quad_source": "river_bridge_1000.obj",
+  "quad_count": 294,
+  "triangles_glb": 588,
+  "under_1000_quads": true,
+  "bounds_xyz": [
+    [
+      -3.5,
+      0.04999999999999993,
+      -8.125
+    ],
+    [
+      3.5,
+      4.325,
+      8.125
+    ]
+  ],
+  "materials": [
+    "darkwood",
+    "earth",
+    "roof",
+    "stone",
+    "wood"
+  ],
+  "source_views": "none / procedural original",
+  "multiview_certified": false,
+  "glb_bytes": 17076
+}

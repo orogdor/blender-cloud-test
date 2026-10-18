@@ -1,0 +1,14 @@
+{
+  "kind": "forest",
+  "allowed_biomes": [
+    "forest",
+    "taiga"
+  ],
+  "max_slope_degrees": 25,
+  "minimum_spacing_tiles": 1,
+  "rotation": "random Y-angle",
+  "instancing": true,
+  "game_hook": "biome forest decoration",
+  "visible_only_if_discovered": false,
+  "notes_et": "Mängus kasutamiseks lisa instancing või GLBLoader; olemasolevat mängureeglistikku automaatselt ei muudeta."
+}

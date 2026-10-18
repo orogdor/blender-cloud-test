@@ -1,3 +1,9 @@
+## 2026-10-18 — World Atlas 1000 procedurally authored drafts
+
+- Added five Kuningriigid world-object recipes with 1000-quad ceiling (village, ruin, rock outcrop, river bridge, forest group).
+- Added quad OBJ sources, GLB exports, validation reports and rebuild scripts under `recipes/world_atlas_1000/`.
+- Multiview 0.1.2 certification remains **pending**: no verified front/side/top witnesses were provided. Assets must not be described as multiview-verified.
+
 ## 0.1.2
 
 - Kõigile uutele mudelitele kohustuslik iga punktipilve punkti kontroll vähemalt kolmes vaates ja kolmes sõltumatus suunas.

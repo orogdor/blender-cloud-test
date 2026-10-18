@@ -1,0 +1,32 @@
+{
+  "id": "world_village_1000",
+  "quad_source": "world_village_1000.obj",
+  "quad_count": 356,
+  "triangles_glb": 712,
+  "under_1000_quads": true,
+  "bounds_xyz": [
+    [
+      -7.5,
+      0.0,
+      -6.5
+    ],
+    [
+      7.5,
+      4.74,
+      6.585
+    ]
+  ],
+  "materials": [
+    "darkwood",
+    "earth",
+    "lightstone",
+    "rocklight",
+    "roof",
+    "stone",
+    "straw",
+    "wood"
+  ],
+  "source_views": "none / procedural original",
+  "multiview_certified": false,
+  "glb_bytes": 22148
+}

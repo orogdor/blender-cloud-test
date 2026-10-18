@@ -1,0 +1,29 @@
+{
+  "id": "forest_cluster_1000",
+  "quad_source": "forest_cluster_1000.obj",
+  "quad_count": 622,
+  "triangles_glb": 1244,
+  "under_1000_quads": true,
+  "bounds_xyz": [
+    [
+      -6.837913910684089,
+      0.0,
+      -5.49064934171621
+    ],
+    [
+      6.966404404654485,
+      8.899999999999999,
+      5.696709505885241
+    ]
+  ],
+  "materials": [
+    "darkwood",
+    "leaves",
+    "leaves2",
+    "moss",
+    "needles"
+  ],
+  "source_views": "none / procedural original",
+  "multiview_certified": false,
+  "glb_bytes": 24980
+}

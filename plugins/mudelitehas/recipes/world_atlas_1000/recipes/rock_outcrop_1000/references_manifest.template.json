@@ -1,0 +1,12 @@
+{
+  "model_id": "rock_outcrop_1000",
+  "status": "references_missing",
+  "independent_directions": [
+    "front",
+    "side",
+    "top"
+  ],
+  "views": [],
+  "witness_per_point": [],
+  "pre_mesh_gate": "blocked until reviewed"
+}

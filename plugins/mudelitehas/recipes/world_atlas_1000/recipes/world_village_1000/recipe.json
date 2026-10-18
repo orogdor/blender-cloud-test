@@ -1,0 +1,27 @@
+{
+  "recipe_id": "world_village_1000",
+  "title_et": "Küla",
+  "version": "1.0.0",
+  "kind": "village",
+  "role": "avastatav",
+  "max_quads": 1000,
+  "target_quads": [
+    350,
+    950
+  ],
+  "coordinate_system": "Y up, pivot ground center",
+  "materials": "vertex colors + MTL",
+  "output": "models/world_village_1000/world_village_1000.glb",
+  "quad_source": "models/world_village_1000/world_village_1000.obj",
+  "builder": "python scripts/build_world_objects.py",
+  "source_method": "procedural authoring",
+  "multiview_certificate": false,
+  "three_direction_reference_required_for_certification": true,
+  "pre_mesh_witness_status": "not supplied, must not be fabricated",
+  "geometry_constraints": [
+    "quads-only OBJ",
+    "GLB triangles <= 2000",
+    "single pivot",
+    "no degenerate quads"
+  ]
+}

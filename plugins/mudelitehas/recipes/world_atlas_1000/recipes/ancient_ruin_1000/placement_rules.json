@@ -1,0 +1,14 @@
+{
+  "kind": "ancient",
+  "allowed_biomes": [
+    "plains",
+    "hills"
+  ],
+  "max_slope_degrees": 25,
+  "minimum_spacing_tiles": 12,
+  "rotation": "random Y-angle",
+  "instancing": false,
+  "game_hook": "discovery relic reward once",
+  "visible_only_if_discovered": true,
+  "notes_et": "Mängus kasutamiseks lisa instancing või GLBLoader; olemasolevat mängureeglistikku automaatselt ei muudeta."
+}

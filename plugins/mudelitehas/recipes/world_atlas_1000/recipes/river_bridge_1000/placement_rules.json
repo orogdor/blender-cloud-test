@@ -1,0 +1,14 @@
+{
+  "kind": "bridge",
+  "allowed_biomes": [
+    "river",
+    "ford"
+  ],
+  "max_slope_degrees": 25,
+  "minimum_spacing_tiles": 2,
+  "rotation": "river-normal aligned to Z",
+  "instancing": false,
+  "game_hook": "ford/bridge crossing",
+  "visible_only_if_discovered": false,
+  "notes_et": "Mängus kasutamiseks lisa instancing või GLBLoader; olemasolevat mängureeglistikku automaatselt ei muudeta."
+}
