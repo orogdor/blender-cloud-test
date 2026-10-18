@@ -1,0 +1,24 @@
+{
+  "id": "river_bridge_1000",
+  "version": "0.1.0",
+  "name": "Jõesild",
+  "mesh": {
+    "source": "OBJ_4_vertex_polygons",
+    "quads": 448,
+    "max_quads": 1000,
+    "glb_triangles": 896
+  },
+  "status": {
+    "usable_procedural_glb": true,
+    "multiview_certified": false
+  },
+  "required_evidence": {
+    "directions": [
+      "front",
+      "right",
+      "top"
+    ],
+    "per_point_witness": "PENDING",
+    "blender_reconstruction": "PENDING"
+  }
+}
