@@ -38,3 +38,7 @@ Keep source image generation separate from the Blender runner. This package cont
 When asked for feedback reporting, run `scripts/feedback.py --workdir <run> --category <category> --description <text> [--frame N]`. Return the local bundle and generated issue link. Do not open or send an issue automatically. The bundle contains version, run ID, hashes and selected checks; models, screenshots, raw logs and environment variables are not included by default.
 
 When fixing a reported defect, retain the original inputs and version, reproduce it first, change the affected stage, and verify both the failing case and the teddy baseline. Bump the version for distributed changes. Do not rewrite old release results or report that all old assets were repaired by changing instructions.
+
+## World-map props 1000 prototype recipes
+
+Five recipe entries are available under `plugins/mudelitehas/recipes/world_props_1000/`: `world_village_1000`, `ancient_ruin_1000`, `rock_outcrop_1000`, `river_bridge_1000`, `forest_cluster_1000`. The user received executable Python builder, source quad OBJ, validated GLB files and model viewer in a separate ZIP. The GitHub registry currently contains recipe metadata only, **not** binary assets or builder. These are **procedural prototypes**, not certified multiview reconstructions: front/right/top reviewed reference evidence and per-point witness before meshing remain pending. Do not claim the Mudelitehas 0.1.2 three-direction gate passed.
