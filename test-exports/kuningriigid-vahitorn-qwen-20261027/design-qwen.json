@@ -1,0 +1,44 @@
+{
+  "title": "Larch Timber Watchtower",
+  "era": "Stone Age / Nordic Iron Age",
+  "style": "Rustic Timber Lattice",
+  "base_width_m": 4.2,
+  "tower_height_m": 6.8,
+  "platform_height_m": 4.0,
+  "upper_cabin_height_m": 1.9,
+  "roof_rise_m": 1.8,
+  "roof_overhang_m": 0.35,
+  "support_width_m": 0.28,
+  "plank_width_m": 0.24,
+  "ladder_rungs": 12,
+  "timber_rgb": [
+    0.65,
+    0.72,
+    0.55
+  ],
+  "timber_dark_rgb": [
+    0.38,
+    0.42,
+    0.3
+  ],
+  "roof_rgb": [
+    0.42,
+    0.38,
+    0.32
+  ],
+  "stone_rgb": [
+    0.6,
+    0.55,
+    0.5
+  ],
+  "banner_rgb": [
+    0.9,
+    0.15,
+    0.05
+  ],
+  "decorative_details": [
+    "Charred oak beam accents on cabin corners",
+    "Woven larch bark roof thatch layers",
+    "Roped ladder rungs with leather handholds"
+  ]
+}
