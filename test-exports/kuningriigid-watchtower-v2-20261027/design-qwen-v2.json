@@ -1,0 +1,41 @@
+{
+  "design_name": "Stone_Age_Octagon_Watch_Shelter",
+  "style_notes": [
+    "Eight-sided stockade silhouette with tightly spaced jagged upright logs and narrow observation gaps.",
+    "Conical steep irregular thatched roof constructed from layered bundles of reed and fir bark.",
+    "Structure rests on rough stone footings secured by stone-age lashing knots and X-braced timber supports.",
+    "Natural uneven textures define the form, avoiding modern symmetry or clean board-and-batten cabin styles."
+  ],
+  "tower_width_m": 4.2,
+  "platform_z_m": 3.5,
+  "roof_eave_z_m": 5.6,
+  "roof_apex_z_m": 7.4,
+  "palisade_log_count_per_octagon_side": 7,
+  "ladder_rungs": 12,
+  "roof_reed_layers": 9,
+  "timber_main_rgb": [
+    0.35,
+    0.28,
+    0.22
+  ],
+  "timber_shadow_rgb": [
+    0.18,
+    0.14,
+    0.11
+  ],
+  "thatch_rgb": [
+    0.68,
+    0.59,
+    0.42
+  ],
+  "stone_rgb": [
+    0.45,
+    0.47,
+    0.49
+  ],
+  "rope_rgb": [
+    0.72,
+    0.63,
+    0.48
+  ]
+}
