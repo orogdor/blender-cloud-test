@@ -1,0 +1,54 @@
+{
+  "project": "Kuningriigid Stone Age adult character",
+  "stage": 1,
+  "status": "needs_repair",
+  "source": "local SDXL + IPAdapter Plus + ControlLoRA OpenPose + CLIP Vision",
+  "results": {
+    "individual_images": 5,
+    "user_requested_single_sheet": true,
+    "combined_png_sha256": "9899c4793213b7c4a75f1ac428996755dfc65bfac04914f1c23ace1870cdec2f",
+    "mobile_preview_sha256": "c20d040a8824e6f3cbe4c92e3cca02b0fc6c98932d0bb23df58209ec643154b8",
+    "cameras_correct": 1,
+    "cameras_required": 5,
+    "identity_consistency": "improved but not geometrically matching"
+  },
+  "per_view": {
+    "front": {
+      "direction_correct": true,
+      "issues": [
+        "anatomical proportions usable as a tentative master",
+        "handmade Stone Age aesthetic still too uniform"
+      ]
+    },
+    "left": {
+      "direction_correct": false,
+      "issues": [
+        "camera remains nearly front-facing, not 90-degree strict profile"
+      ]
+    },
+    "back": {
+      "direction_correct": false,
+      "issues": [
+        "face visible; not rear-facing view"
+      ]
+    },
+    "right": {
+      "direction_correct": false,
+      "issues": [
+        "camera nearly frontal, not strict side silhouette"
+      ]
+    },
+    "top": {
+      "direction_correct": false,
+      "issues": [
+        "full front body shown with artifacts; no overhead camera projection"
+      ]
+    }
+  },
+  "fatal": "Only frontal projection correct; 3D point cloud from current 5-view images would be fabricated/mismatched",
+  "next_required_method": "A calibrated single-object multiview model or an actual same-character 3D reference with known cameras. Generic SDXL+OpenPose+IPAdapter is inadequate for exact novel-view synthesis on this subject.",
+  "point_cloud_allowed": false,
+  "later_stages_allowed": false,
+  "provenance": "Generated locally on DESKTOP-QKU6KKQ; synthetic reference, not measured capture",
+  "no_2_5D_required": true
+}
