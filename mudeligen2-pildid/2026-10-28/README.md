@@ -1,3 +1,11 @@
+## Viimati kontrollitud kell 11:29 (28.10.2026)
+
+Treeningus on **54 katset ja 0 heakskiitu**. Viimased viis katset (50–54) lõppesid Blenderi veaga ega toonud uut 3D-renderdust. Pärast 11:19 ei ole uut 3D-pilti salvestatud. Süsteem alustas järgmisena kivist kaitsemüüri osade genereerimist.
+
+**Uusim salvestatud pilt:** [katse 54 veakaart](katse_0054.svg). See on 11:29 seisuga uus, mitte vana maja renderdus.
+
+---
+
 # Mudeligen2 – treeningupildid (28.10.2026)
 
 Need on **sinu arvuti Blenderi tegelikud renderdused**, mitte kunstlikult loodud illustratsioonid.
