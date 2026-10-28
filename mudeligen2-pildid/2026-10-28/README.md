@@ -1,3 +1,35 @@
+# Mudeligen2 – uue 4-tunnise treeningu pildid
+
+**Need on tavalised JPG-failid.** Vajuta pildil või selle all oleval lingil, et avada täissuuruses fail. Tegelikud Blenderi renderdused 28.10.2026 kell 12:08–12:42.
+
+## Müür tervikuna, 12:26
+
+![Blenderis loodud uus kiviaja kaitsemüür](jpg/muur-tervik-uus.jpg)
+
+[AVA JPG – müür tervikuna](jpg/muur-tervik-uus.jpg)
+
+## Müüri põhiosa, 7/10
+
+![Müüri põhiosa](jpg/muur-pohiosa-uus.jpg)
+
+[AVA JPG – müüri põhiosa](jpg/muur-pohiosa-uus.jpg)
+
+## Müüri ülaosa, 7/10
+
+![Sakiline müüri ülaosa](jpg/muur-ulaosa-uus.jpg)
+
+[AVA JPG – müüri ülaosa](jpg/muur-ulaosa-uus.jpg)
+
+## Tee detailikatse, 2/10
+
+![Viimane tee detail](jpg/tee-uus.jpg)
+
+[AVA JPG – tee](jpg/tee-uus.jpg)
+
+Pildid pärinevad samast uuest 4-tunnisest treeningust. Üksikuid müüri osasid hinnati 7/10, kuid tervikmudeli automaatne hinnang ei valminud; see ei ole täielikult heakskiidetud lõppmudel.
+
+---
+
 ## UUS: müüri proov 28.10 kell 11:40
 
 Need kaks pilti on Qweni **katse 59** skripti põhjal, pärast Blenderi API vigade parandamist käsitsi. Tegemist pole heakskiidetud mudeliga (8 405 tahku, 164 probleemset serva). Ükski treeningus automaatselt valminud osa pole veel heaks kiidetud.
