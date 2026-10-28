@@ -1,3 +1,17 @@
+## UUS: müüri proov 28.10 kell 11:40
+
+Need kaks pilti on Qweni **katse 59** skripti põhjal, pärast Blenderi API vigade parandamist käsitsi. Tegemist pole heakskiidetud mudeliga (8 405 tahku, 164 probleemset serva). Ükski treeningus automaatselt valminud osa pole veel heaks kiidetud.
+
+**Uus müürirenderdus:**
+
+![Uus müürikatse](muur_katse59_parandatud_eest.svg)
+
+**Uus külgvaade:**
+
+![Uus müürikatse külgvaates](muur_katse59_parandatud_kylg.svg)
+
+---
+
 ## Viimati kontrollitud kell 11:29 (28.10.2026)
 
 Treeningus on **54 katset ja 0 heakskiitu**. Viimased viis katset (50–54) lõppesid Blenderi veaga ega toonud uut 3D-renderdust. Pärast 11:19 ei ole uut 3D-pilti salvestatud. Süsteem alustas järgmisena kivist kaitsemüüri osade genereerimist.
